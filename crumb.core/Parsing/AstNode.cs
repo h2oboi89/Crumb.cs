@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
-namespace crumb.core.Parsing;
-internal class AstNode
+namespace Crumb.Core.Parsing;
+public class AstNode
 {
     private const string INDENT = "  ";
 

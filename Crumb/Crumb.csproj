@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\crumb.core\crumb.core.csproj" />
+    <ProjectReference Include="..\Crumb.Core\Crumb.Core.csproj" />
   </ItemGroup>
 
 </Project>

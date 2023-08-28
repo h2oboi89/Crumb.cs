@@ -1,5 +1,5 @@
-﻿namespace crumb.core.Parsing;
-internal enum OpCodes
+﻿namespace Crumb.Core.Parsing;
+public enum OpCodes
 {
     Integer,
     Float,

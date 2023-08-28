@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace crumb.core.Lexing
+namespace Crumb.Core.Lexing
 {
     [Serializable]
     internal class LexingException : Exception

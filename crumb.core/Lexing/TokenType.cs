@@ -1,4 +1,4 @@
-﻿namespace crumb.core.Lexing;
+﻿namespace Crumb.Core.Lexing;
 
 public enum TokenType
 {

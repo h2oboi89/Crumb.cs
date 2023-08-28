@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace crumb.core.Lexing;
+namespace Crumb.Core.Lexing;
 
 public class Token
 {
