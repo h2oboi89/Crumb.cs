@@ -15,6 +15,8 @@ public static class Lexer
 
         var lineNumber = 1;
 
+        tokens.Add(new Token(null, TokenType.Start, lineNumber));
+
         var i = 0;
 
         while (i < code.Length)
@@ -84,10 +86,8 @@ public static class Lexer
 
                 i++;
 
-                while (code[i] != '"' || (code[i] == '"' && code[i - 1] == '\\'))
+                while (code[i] != '"')
                 {
-                    i++;
-
                     if (code[i] == '\n')
                     {
                         throw new LexingException($"Syntax error @ Line {lineNumber}: unexpected new line before string closed.");
@@ -97,6 +97,13 @@ public static class Lexer
                     {
                         throw new LexingException($"Syntax error @ Line {lineNumber}: unexpected end of file before string closed.");
                     }
+
+                    if (code[i] == '\\')
+                    {
+                        i++;
+                    }
+
+                    i++;
                 }
 
                 var value = code[stringStart..i];
@@ -123,6 +130,7 @@ public static class Lexer
                         isFloat = true;
                     }
 
+                    i++;
                 }
 
                 var value = code[numberStart..i];

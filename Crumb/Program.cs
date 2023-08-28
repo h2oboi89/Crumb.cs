@@ -19,10 +19,7 @@ if (args.Length < fileArg + 1)
     Environment.Exit(1);
 }
 
-var codePath = args[fileArg];
-
-
-var code = File.ReadAllText(codePath) + '\0';
+var code = File.ReadAllText(args[fileArg]) + '\0';
 
 if (debug)
 {
@@ -37,18 +34,28 @@ if (debug)
 {
     Console.WriteLine();
     Console.WriteLine($"TOKENS");
-    foreach (var token in tokens)
+    foreach (var (token, index) in tokens.Select((t, i) => (t, i)))
     {
-        Console.WriteLine(token);
+        Console.WriteLine($"[{index}]: {token}");
     }
     Console.WriteLine($"Token Count: {tokens.Count}");
 }
 
-var ast = Parser.Parse(tokens);
+var program = new List<AstNode>();
+
+try
+{
+    program.AddRange(Parser.Parse(tokens));
+}
+catch (ParsingException e)
+{
+    Console.Error.WriteLine(e.Message);
+    Environment.Exit(1);
+}
 
 if (debug)
 {
     Console.WriteLine();
     Console.WriteLine($"AST");
-    Console.WriteLine(ast?.ToString() ?? "NULL");
+    Console.WriteLine(program.Count > 0 ? string.Join(Environment.NewLine, program.Select(a => a.ToString())) : "No Program");
 }

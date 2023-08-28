@@ -42,7 +42,7 @@ public class AstNode
 
         foreach(var child in Children)
         {
-            sb.AppendLine(child.ToString(depth + 1));
+            sb.Append(child.ToString(depth + 1));
         }
 
         return sb.ToString();
