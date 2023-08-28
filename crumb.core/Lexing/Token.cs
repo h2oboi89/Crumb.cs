@@ -2,7 +2,7 @@
 
 namespace crumb.core.Lexing;
 
-internal class Token
+public class Token
 {
     public string? Value { get; private set; }
     public TokenType Type { get; private set; }

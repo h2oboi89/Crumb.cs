@@ -1,6 +1,6 @@
 ﻿namespace crumb.core.Lexing;
 
-internal enum TokenType
+public enum TokenType
 {
     ApplyOpen,
     ApplyClose,

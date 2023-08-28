@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crumb.core", "crumb.core\cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{3014E447-973A-456E-AD5D-8C5AA8C239E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crumb", "Crumb\Crumb.csproj", "{45F5F501-2E04-420B-8D81-12C0FB03D887}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3014E447-973A-456E-AD5D-8C5AA8C239E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3014E447-973A-456E-AD5D-8C5AA8C239E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3014E447-973A-456E-AD5D-8C5AA8C239E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F5F501-2E04-420B-8D81-12C0FB03D887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F5F501-2E04-420B-8D81-12C0FB03D887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F5F501-2E04-420B-8D81-12C0FB03D887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F5F501-2E04-420B-8D81-12C0FB03D887}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
