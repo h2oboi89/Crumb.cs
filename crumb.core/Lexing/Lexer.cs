@@ -21,9 +21,20 @@ public static class Lexer
         {
             var c = code[i];
 
+            if (c == '\0')
+            {
+                break;
+            }
+
             if (c == '\n')
             {
                 lineNumber++;
+                i++;
+                continue;
+            }
+
+            if (WHITESPACE.Contains(c))
+            {
                 i++;
                 continue;
             }
@@ -88,7 +99,7 @@ public static class Lexer
                     }
                 }
 
-                var value = code[stringStart..(i - stringStart)];
+                var value = code[stringStart..i];
 
                 tokens.Add(new Token(value, TokenType.String, lineNumber));
             }
@@ -114,15 +125,10 @@ public static class Lexer
 
                 }
 
-                var value = code[numberStart..(i - numberStart)];
+                var value = code[numberStart..i];
 
                 tokens.Add(new Token(value, isFloat ? TokenType.Float : TokenType.Integer, lineNumber));
 
-                continue;
-            }
-            else if (WHITESPACE.Contains(c))
-            {
-                i++;
                 continue;
             }
             else
@@ -139,7 +145,7 @@ public static class Lexer
                     i++;
                 }
 
-                var value = code[identifierStart..(i - identifierStart)];
+                var value = code[identifierStart..i];
 
                 tokens.Add(new Token(value, TokenType.Identifier, lineNumber));
 
