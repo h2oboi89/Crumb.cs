@@ -10,7 +10,7 @@ public class AstNode
     public string? Value { get; private set; }
     public int LineNumber { get; private set; }
 
-    public AstNode(OpCodes opCode, string? value, int lineNumber)
+    public AstNode(string? value, OpCodes opCode, int lineNumber)
     {
         OpCode = opCode;
         Value = value;
@@ -21,7 +21,7 @@ public class AstNode
 
     public AstNode Clone()
     {
-        var copy = new AstNode(OpCode, Value, LineNumber)
+        var copy = new AstNode(Value, OpCode, LineNumber)
         {
             Children = new(Children.Select(c => c.Clone()))
         };
