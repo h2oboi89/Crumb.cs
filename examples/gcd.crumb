@@ -1,0 +1,15 @@
+gcd = {a b ->
+  <- (if (is a 0) {<- b} {
+    <- (gcd (remainder b a) a)
+  })
+}
+
+(print "Input two numbers to find the gcd.\n")
+
+(print "Number 1: ")
+a = (integer (input))
+
+(print "Number 2: ")
+b = (integer (input))
+
+(print "The result is:" (gcd a b) "\n")

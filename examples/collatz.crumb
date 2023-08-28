@@ -1,0 +1,28 @@
+// prints the collatz path for a given input
+(print "Input a number to print the collatz sequence for: ")
+in = (integer (input))
+
+// recursively applys the collatz conjecture function
+// returns the stopping time
+collatz = {n ->
+
+  // divides 2 if divisible by 2
+  // multiplies by 3 and adds 1 if not
+  // applys f again on the new number
+  res = (if (is (remainder n 2) 0) {
+    <- (integer (divide n 2))
+  } {
+    <- (add (multiply n 3) 1)
+  })
+
+  <- (if (is res 1) {
+    (print 1 "\n")
+    <- 1
+  } {
+    // recursively apply collatz
+    (print res "\n")
+    <- (add (collatz res) 1)
+  })
+}
+
+(print "stopping time:" (collatz in) "\n")

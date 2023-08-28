@@ -1,0 +1,9 @@
+// loop forever
+(until "stop" {state n ->
+
+  // print random slash
+  (print (if (integer (add (random) 0.5)) {<- "╱"} {<- "╲"}))
+
+  // wait to slow down animation
+  (wait 0.001)
+})
