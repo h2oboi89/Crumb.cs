@@ -6,12 +6,10 @@ namespace UnitTests.Crumb.Core.Parsing;
 [TestFixture]
 internal class ParserTests
 {
-    private static List<Token> GivenThatInputIsLexed(string input) => Lexer.Lex(input);
-
     [Test]
     public static void SimpleValues()
     {
-        var tokens = GivenThatInputIsLexed("""
+        var tokens = Lexer.Lex("""
             1 
             3.14 
             "foo" 
@@ -36,7 +34,7 @@ internal class ParserTests
     [Test]
     public static void Application_Valid()
     {
-        var tokens = GivenThatInputIsLexed("( 1 )");
+        var tokens = Lexer.Lex("( 1 )");
 
         var expected = """
             1| Statement
@@ -50,7 +48,7 @@ internal class ParserTests
     [Test]
     public static void Application_MissingClose()
     {
-        var tokens = GivenThatInputIsLexed("( 1 ");
+        var tokens = Lexer.Lex("( 1 ");
 
         var expected = "Syntax error @ line 1: unexpected token End.";
 
