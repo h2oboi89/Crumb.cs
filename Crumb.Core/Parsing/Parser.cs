@@ -55,9 +55,13 @@ public static class Parser
     // ebnf: return = "<-", value;
     private static AstNode ParseReturn(List<Token> tokens, ref int index)
     {
-        ConsumeToken(tokens, TokenType.Return, ref index);
+        var token = ConsumeToken(tokens, TokenType.Return, ref index);
 
-        return ParseValue(tokens, ref index);
+        var ast = new AstNode(null, OpCodes.Return, token.LineNumber);
+
+        ast.Append(ParseValue(tokens, ref index));
+
+        return ast;
     }
 
     // parse assignment
