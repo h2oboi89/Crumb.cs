@@ -11,6 +11,8 @@ public static class Lexer
 
     public static List<Token> Lex(string code)
     {
+        code += '\0';
+
         var tokens = new List<Token>();
 
         var lineNumber = 1;

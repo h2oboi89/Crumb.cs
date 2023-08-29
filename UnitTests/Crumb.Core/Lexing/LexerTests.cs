@@ -23,7 +23,7 @@ internal class LexerTests
     [Test]
     public static void NewLine_IncrementsLineNumber()
     {
-        var input = "\n\0";
+        var input = "\n";
 
         var tokens = Lexer.Lex(input);
 
@@ -38,7 +38,7 @@ internal class LexerTests
     [Test]
     public static void Whitespace_IsIgnored()
     {
-        var input = " \r\t\f\v\0";
+        var input = " \r\t\f\v";
 
         var tokens = Lexer.Lex(input);
 
@@ -56,7 +56,7 @@ internal class LexerTests
         var values = new (string input, string expected)[]
         {
             (
-                "abc // foo bar\0",
+                "abc // foo bar",
                 """
                 [0]: 1| Start
                 [1]: 1| Identifier abc
@@ -64,7 +64,7 @@ internal class LexerTests
                 """
             ),
             (
-                "abc // foo \n bar\0",
+                "abc // foo \n bar",
                 """
                 [0]: 1| Start
                 [1]: 1| Identifier abc
@@ -85,7 +85,7 @@ internal class LexerTests
     [Test]
     public static void SingleCharacterTokens()
     {
-        var input = "() = {}\0";
+        var input = "() = {}";
 
         var expected = """
             [0]: 1| Start
@@ -125,7 +125,7 @@ internal class LexerTests
         var values = new (string input, string expected)[]
         {
             (
-                "-\0",
+                "-",
                 """
                 [0]: 1| Start
                 [1]: 1| Identifier -
@@ -133,7 +133,7 @@ internal class LexerTests
                 """
             ),
             (
-                "<\0",
+                "<",
                 """
                 [0]: 1| Start
                 [1]: 1| Identifier <
@@ -141,7 +141,7 @@ internal class LexerTests
                 """
             ),
             (
-                "/\0",
+                "/",
                 """
                 [0]: 1| Start
                 [1]: 1| Identifier /
@@ -164,11 +164,11 @@ internal class LexerTests
         var values = new (string input, string expected)[]
         {
             (
-                "\"I like\nstrings\"\0",
+                "\"I like\nstrings\"",
                 "Syntax error @ line 1: unexpected new line before string closed."
             ),
             (
-                "\"I like\0strings\"\0",
+                "\"I like\0strings\"",
                 "Syntax error @ line 1: unexpected end of file before string closed."
             )
         };
@@ -183,7 +183,7 @@ internal class LexerTests
     [Test]
     public static void String_Simple()
     {
-        var input = "\"I like strings\"\0";
+        var input = "\"I like strings\"";
 
         var expected = """
             [0]: 1| Start
@@ -199,7 +199,7 @@ internal class LexerTests
     [Test]
     public static void Strings_CanHaveEscapeSequences()
     {
-        var input = """ " \\ \" " """ + '\0';
+        var input = """ " \\ \" " """;
 
         var expected = """
             [0]: 1| Start
@@ -225,7 +225,7 @@ internal class LexerTests
     [Test]
     public static void Numbers_CanBeIntegers()
     {
-        var input = "1 2 3 314 90000 -1 -0\0";
+        var input = "1 2 3 314 90000 -1 -0";
 
         var expected = """
             [0]: 1| Start
@@ -247,7 +247,7 @@ internal class LexerTests
     [Test]
     public static void Numbers_CanBeFloats()
     {
-        var input = "1.23 3.14159 90.000 -1.0 -0.0\0";
+        var input = "1.23 3.14159 90.000 -1.0 -0.0";
 
         var expected = """
             [0]: 1| Start

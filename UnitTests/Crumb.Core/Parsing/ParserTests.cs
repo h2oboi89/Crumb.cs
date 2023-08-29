@@ -6,7 +6,7 @@ namespace UnitTests.Crumb.Core.Parsing;
 [TestFixture]
 internal class ParserTests
 {
-    private static List<Token> GivenThatInputIsLexed(string input) => Lexer.Lex(input + '\0');
+    private static List<Token> GivenThatInputIsLexed(string input) => Lexer.Lex(input);
 
     [Test]
     public static void SimpleValues()

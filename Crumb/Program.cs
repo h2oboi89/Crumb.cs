@@ -19,7 +19,7 @@ if (args.Length < fileArg + 1)
     Environment.Exit(1);
 }
 
-var code = File.ReadAllText(args[fileArg]) + '\0';
+var code = File.ReadAllText(args[fileArg]);
 
 if (debug)
 {
