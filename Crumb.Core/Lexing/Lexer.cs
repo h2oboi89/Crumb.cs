@@ -43,12 +43,8 @@ public static class Lexer
 
             if (IsComment(c, code[i + 1]))
             {
-                // comments
-                while (code[i] != '\n' && i < code.Length)
-                {
-                    i++;
-                }
-                lineNumber++;
+                ConsumeComment(code, ref lineNumber, ref i);
+                continue;
             }
             else if (c == '(')
             {
@@ -82,81 +78,17 @@ public static class Lexer
             }
             else if (c == '"')
             {
-                var stringStart = i + 1;
-
-                i++;
-
-                while (code[i] != '"')
-                {
-                    if (code[i] == '\n')
-                    {
-                        throw new LexingException($"Syntax error @ Line {lineNumber}: unexpected new line before string closed.");
-                    }
-
-                    if (code[i] == '\0')
-                    {
-                        throw new LexingException($"Syntax error @ Line {lineNumber}: unexpected end of file before string closed.");
-                    }
-
-                    if (code[i] == '\\')
-                    {
-                        i++;
-                    }
-
-                    i++;
-                }
-
-                var value = code[stringStart..i];
-
-                tokens.Add(new Token(value, TokenType.String, lineNumber));
+                tokens.Add(ConsumeString(code, lineNumber, ref i));
+                continue;
             }
             else if (char.IsDigit(c) || (c == '-' && char.IsDigit(code[i + 1])))
             {
-                var numberStart = i;
-
-                var isFloat = false;
-
-                i++;
-
-                while (char.IsDigit(code[i]) || code[i] == '.')
-                {
-                    if (code[i] == '.')
-                    {
-                        if (isFloat)
-                        {
-                            throw new LexingException($"Syntax error @ {lineNumber}: Multiple decimal points in single number.");
-                        }
-
-                        isFloat = true;
-                    }
-
-                    i++;
-                }
-
-                var value = code[numberStart..i];
-
-                tokens.Add(new Token(value, isFloat ? TokenType.Float : TokenType.Integer, lineNumber));
-
+                tokens.Add(ConsumeNumber(code, lineNumber, ref i));
                 continue;
             }
             else
             {
-                var identifierStart = i;
-
-                while (
-                    !WHITESPACE.Contains(code[i]) &&
-                    !RESERVED.Contains(code[i]) &&
-                    !IsArrow(code[i], code[i + 1]) &&
-                    !IsReturn(code[i], code[i + 1]) &&
-                    !IsComment(code[i], code[i + 1]))
-                {
-                    i++;
-                }
-
-                var value = code[identifierStart..i];
-
-                tokens.Add(new Token(value, TokenType.Identifier, lineNumber));
-
+                tokens.Add(ConsumeIdentifier(code, lineNumber, ref i));
                 continue;
             }
 
@@ -166,5 +98,98 @@ public static class Lexer
         tokens.Add(new Token(null, TokenType.End, lineNumber));
 
         return tokens;
+    }
+
+    private static void ConsumeComment(string code, ref int lineNumber, ref int i)
+    {
+        while (i < code.Length && code[i] != '\n')
+        {
+            i++;
+        }
+        lineNumber++;
+        i++;
+    }
+
+    private static Token ConsumeIdentifier(string code, int lineNumber, ref int i)
+    {
+        var identifierStart = i;
+
+        while (
+            i < code.Length &&
+            !WHITESPACE.Contains(code[i]) &&
+            !RESERVED.Contains(code[i]) &&
+            i + 1 < code.Length &&
+            !IsArrow(code[i], code[i + 1]) &&
+            !IsReturn(code[i], code[i + 1]) &&
+            !IsComment(code[i], code[i + 1]))
+        {
+            i++;
+        }
+
+        var value = code[identifierStart..i];
+
+        return new Token(value, TokenType.Identifier, lineNumber);
+    }
+
+    private static Token ConsumeNumber(string code, int lineNumber, ref int i)
+    {
+        var numberStart = i;
+
+        var isFloat = false;
+
+        i++;
+
+        while (char.IsDigit(code[i]) || 
+            (code[i] == '.' && (i + 1 < code.Length) && char.IsDigit(code[i + 1])))
+        {
+            if (code[i] == '.')
+            {
+                if (isFloat)
+                {
+                    throw new LexingException(lineNumber, "multiple decimal points in single number.");
+                }
+
+                isFloat = true;
+            }
+
+            i++;
+        }
+
+        var value = code[numberStart..i];
+
+        return new Token(value, isFloat ? TokenType.Float : TokenType.Integer, lineNumber);
+    }
+
+    private static Token ConsumeString(string code, int lineNumber, ref int i)
+    {
+        var stringStart = i + 1;
+
+        i++;
+
+        while (code[i] != '"')
+        {
+            if (code[i] == '\n')
+            {
+                throw new LexingException(lineNumber, "unexpected new line before string closed.");
+            }
+
+            if (code[i] == '\0')
+            {
+                throw new LexingException(lineNumber, "unexpected end of file before string closed.");
+            }
+
+            if (code[i] == '\\')
+            {
+                i++;
+            }
+
+            i++;
+        }
+
+        var value = code[stringStart..i];
+
+        i++;
+
+        return new Token(value, TokenType.String, lineNumber);
     }
 }

@@ -1,15 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿namespace Crumb.Core.Lexing;
 
-namespace Crumb.Core.Lexing;
-
-[Serializable]
 public class LexingException : Exception
 {
-    public LexingException() { }
-
     public LexingException(string? message) : base(message) { }
 
-    public LexingException(string? message, Exception? innerException) : base(message, innerException) { }
-
-    protected LexingException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    public LexingException(int lineNumber, string error) : this($"Syntax error @ Line {lineNumber}: {error}") { }
 }

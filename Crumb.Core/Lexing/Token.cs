@@ -2,11 +2,11 @@
 
 namespace Crumb.Core.Lexing;
 
-public class Token
+public readonly record struct Token
 {
-    public string? Value { get; private set; }
-    public TokenType Type { get; private set; }
-    public int LineNumber { get; private set; }
+    public readonly string? Value;
+    public readonly TokenType Type;
+    public readonly int LineNumber;
 
     public Token(string? value, TokenType type, int lineNumber)
     {
@@ -17,15 +17,6 @@ public class Token
 
     public override string ToString() => $"{LineNumber}| {Type}{(string.IsNullOrEmpty(Value) ? string.Empty : $" {Value}")}";
 
-    public static string Print(IEnumerable<Token> tokens)
-    {
-        var sb = new StringBuilder();
-
-        foreach (var token in tokens)
-        {
-            sb.AppendLine(token.ToString());
-        }
-
-        return sb.ToString();
-    }
+    public static string Print(IEnumerable<Token> tokens) =>
+        string.Join(Environment.NewLine, tokens.Select((t, i) => $"[{i}]: {t}"));
 }

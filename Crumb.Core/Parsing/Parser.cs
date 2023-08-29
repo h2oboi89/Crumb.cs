@@ -158,7 +158,7 @@ public static class Parser
 
         if (token.Type != expected)
         {
-            throw new ParsingException(token, $"Expected {expected}, but got {token.Type}");
+            throw new ParsingException(token, $"Expected {expected}, but got {token.Type}.");
         }
 
         return token;

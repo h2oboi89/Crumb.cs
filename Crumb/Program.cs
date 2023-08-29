@@ -34,10 +34,7 @@ if (debug)
 {
     Console.WriteLine();
     Console.WriteLine($"TOKENS");
-    foreach (var (token, index) in tokens.Select((t, i) => (t, i)))
-    {
-        Console.WriteLine($"[{index}]: {token}");
-    }
+    Token.Print(tokens);
     Console.WriteLine($"Token Count: {tokens.Count}");
 }
 

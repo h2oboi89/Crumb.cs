@@ -26,4 +26,8 @@
     <PackageReference Include="ReportGenerator" Version="5.1.23" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Crumb.Core\Crumb.Core.csproj" />
+  </ItemGroup>
+
 </Project>
