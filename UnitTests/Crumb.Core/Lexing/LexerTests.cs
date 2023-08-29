@@ -1,5 +1,4 @@
 ﻿using Crumb.Core.Lexing;
-using Newtonsoft.Json.Linq;
 
 namespace UnitTests.Crumb.Core.Lexing;
 

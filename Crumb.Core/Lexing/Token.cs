@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Crumb.Core.Lexing;
+﻿namespace Crumb.Core.Lexing;
 
 public readonly record struct Token
 {
