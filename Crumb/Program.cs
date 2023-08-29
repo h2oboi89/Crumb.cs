@@ -54,5 +54,5 @@ if (debug)
 {
     Console.WriteLine();
     Console.WriteLine($"AST");
-    Console.WriteLine(program.Count > 0 ? string.Join(Environment.NewLine, program.Select(a => a.ToString())) : "No Program");
+    Console.WriteLine(AstNode.Print(program));
 }

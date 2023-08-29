@@ -49,4 +49,7 @@ public class AstNode
     }
 
     public override string ToString() => ToString(0);
+
+    public static string Print(List<AstNode> program) =>
+        program.Count > 0 ? string.Join(Environment.NewLine, program.Select(a => a.ToString())) : "No Program";
 }
