@@ -3,7 +3,7 @@
 namespace Crumb.Core.Parsing;
 public class AstNode
 {
-    private const string INDENT = "  ";
+    private const string INDENT = "    ";
 
     public List<AstNode> Children { get; private set; } = new();
     public OpCodes OpCode { get; private set; }
@@ -33,19 +33,18 @@ public class AstNode
     {
         var sb = new StringBuilder();
 
-        for(var i = 0; i < depth ; i++)
+        for (var i = 0; i < depth; i++)
         {
             sb.Append(INDENT);
         }
 
-        sb.AppendLine($"{LineNumber}| {OpCode}{(string.IsNullOrEmpty(Value) ? string.Empty : $" {Value}")}");
+        sb.Append($"{LineNumber}| {OpCode}{(string.IsNullOrEmpty(Value) ? string.Empty : $" {Value}")}");
 
-        foreach(var child in Children)
-        {
-            sb.Append(child.ToString(depth + 1));
-        }
+        var strings = new List<string> { sb.ToString() };
 
-        return sb.ToString();
+        strings.AddRange(Children.Select(c => c.ToString(depth + 1)));
+
+        return string.Join(Environment.NewLine, strings);
     }
 
     public override string ToString() => ToString(0);

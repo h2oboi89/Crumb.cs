@@ -165,11 +165,11 @@ internal class LexerTests
         {
             (
                 "\"I like\nstrings\"\0",
-                "Syntax error @ Line 1: unexpected new line before string closed."
+                "Syntax error @ line 1: unexpected new line before string closed."
             ),
             (
                 "\"I like\0strings\"\0",
-                "Syntax error @ Line 1: unexpected end of file before string closed."
+                "Syntax error @ line 1: unexpected end of file before string closed."
             )
         };
         
@@ -218,7 +218,7 @@ internal class LexerTests
         var input = "1.2.3";
 
         Assert.That(() => Lexer.Lex(input), Throws.TypeOf<LexingException>()
-            .With.Message.EqualTo("Syntax error @ Line 1: multiple decimal points in single number."));
+            .With.Message.EqualTo("Syntax error @ line 1: multiple decimal points in single number."));
     }
 
 

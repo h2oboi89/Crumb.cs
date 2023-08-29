@@ -91,7 +91,7 @@ public static class Parser
             TokenType.Float => ConsumeToken(tokens, OpCodes.Float, ref index),
             TokenType.String => ConsumeToken(tokens, OpCodes.String, ref index),
             TokenType.Identifier => ConsumeToken(tokens, OpCodes.Identifier, ref index),
-            _ => throw new ParsingException($"Unexpected token {token}."),
+            _ => throw new ParsingException(token, $"unexpected token {token.Type}."),
         };
     }
 
@@ -158,7 +158,7 @@ public static class Parser
 
         if (token.Type != expected)
         {
-            throw new ParsingException(token, $"Expected {expected}, but got {token.Type}.");
+            throw new ParsingException(token, $"expected {expected}, but got {token.Type}.");
         }
 
         return token;
