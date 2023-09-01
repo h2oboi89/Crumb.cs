@@ -14,8 +14,8 @@ References: [Start](#Start), [Block](#Block), [End](#End)
 
 ![Block](.\diagram/Block.svg)
 
-Used by: [Program](#Program), [Block](#Block), [Atom](#Atom)
-References: [Block](#Block), [Apply](#Apply), [Atom](#Atom)
+Used by: [Program](#Program), [Atom](#Atom)
+References: [Apply](#Apply), [Atom](#Atom)
 
 ### Apply
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="railroad-diagram" width="337" height="140" viewBox="0 0 337 140">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="railroad-diagram" width="337" height="110" viewBox="0 0 337 110">
 <defs><style type="text/css"><![CDATA[ svg.railroad-diagram {
   background-color: hsl(30,20%,95%);
 }
@@ -61,32 +61,24 @@ svg.railroad-diagram rect {
 <path d="M138 41h0"></path>
 <path d="M198 41h0"></path>
 <rect x="138" y="30" width="60" height="22"></rect>
-<text x="168" y="45">Block</text>
+<text x="168" y="45">Apply</text>
 </g>
 <path d="M198 41h20"></path>
 <path d="M118 41a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path>
 <g>
-<path d="M138 71h0"></path>
-<path d="M198 71h0"></path>
-<rect x="138" y="60" width="60" height="22"></rect>
-<text x="168" y="75">Apply</text>
+<path d="M138 71h4"></path>
+<path d="M194 71h4"></path>
+<rect x="142" y="60" width="52" height="22"></rect>
+<text x="168" y="75">Atom</text>
 </g>
 <path d="M198 71a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path>
-<path d="M118 41a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path>
-<g>
-<path d="M138 101h4"></path>
-<path d="M194 101h4"></path>
-<rect x="142" y="90" width="52" height="22"></rect>
-<text x="168" y="105">Atom</text>
-</g>
-<path d="M198 101a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path>
 </g>
 <path d="M218 41h10"></path>
-<path d="M118 41a10 10 0 0 0 -10 10v59a10 10 0 0 0 10 10"></path>
+<path d="M118 41a10 10 0 0 0 -10 10v29a10 10 0 0 0 10 10"></path>
 <g>
-<path d="M118 120h100"></path>
+<path d="M118 90h100"></path>
 </g>
-<path d="M218 120a10 10 0 0 0 10 -10v-59a10 10 0 0 0 -10 -10"></path>
+<path d="M218 90a10 10 0 0 0 10 -10v-29a10 10 0 0 0 -10 -10"></path>
 </g>
 <path d="M228 41h20"></path>
 </g>
