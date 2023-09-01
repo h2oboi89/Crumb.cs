@@ -14,17 +14,21 @@ Statement   ::= '(' Identifier ( Atom ) ')';
 
 Atom        ::= List | Integer | Float| String | Identifier | Scope;
 
-List        ::= '(' ( Atom )* ')';
+List        ::= '[' ( Atom )* ']';
 
 Integer     ::= [ '-' ] ( Digit )+;
 
 Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+;
 
+Digit       ::= [0-9]+;
+
 String      ::= '"' .* '"';
+
+/* NOTE for String: '. matches everything but '"' unless it is escaped with a '\' */
 
 Identifier  ::= .*;
 
-Digit       ::= ( '0-9' )+;
+/* NOT for Identifier: '.' matches anything that does not make it an Integer, Float, or String */
 ```
 
 [Grammar](./grammar/index.md)

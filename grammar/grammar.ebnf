@@ -1,5 +1,7 @@
-// this is original grammar as used on site to generate diagram
-// copy of this in README has semicolons at end of each line to make syntax highlighter happy
+/*
+this is original grammar as used on site to generate diagram
+copy of this in README has semicolons at end of each line to make syntax highlighter happy
+*/
 
 Program     ::= Start Scope End
 
@@ -9,14 +11,18 @@ Statement   ::= '(' Identifier ( Atom ) ')'
 
 Atom        ::= List | Integer | Float| String | Identifier | Scope
 
-List        ::= '(' ( Atom )* ')'
+List        ::= '[' ( Atom )* ']'
 
 Integer     ::= [ '-' ] ( Digit )+
 
 Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+
 
+Digit       ::= [0-9]+
+
 String      ::= '"' .* '"'
+
+/* NOTE for String: '.' matches everything but '"' unless it is escaped with a '\' */
 
 Identifier  ::= .*
 
-Digit       ::= ( '0-9' )+
+/* NOT for Identifier: '.' matches anything that does not make it an Integer, Float, or String */
