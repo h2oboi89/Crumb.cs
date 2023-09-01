@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crumb.Core", "Crumb.Core\Crumb.Core.csproj", "{77F84E7E-23B2-4AEB-8A75-E0924CBB7CE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{6D49BC63-13E1-4159-9A58-5E522E8B828E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{77F84E7E-23B2-4AEB-8A75-E0924CBB7CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77F84E7E-23B2-4AEB-8A75-E0924CBB7CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77F84E7E-23B2-4AEB-8A75-E0924CBB7CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
