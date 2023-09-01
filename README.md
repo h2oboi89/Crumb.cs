@@ -8,15 +8,11 @@ Deviated from the original enough that it should probably get a different name b
 ```ebnf
 Program     ::= Start Block End;
 
-Block       ::= '{' ( Block | Statement )* '}';
+Block       ::= '{' ( Block | Apply | Atom )* '}';
 
-Statement   ::= ( Apply | Define )+;
+Apply       ::= '(' ( Atom | Apply )+ ')';
 
-Apply       ::= '(' Identifier ( Atom )* ')';
-
-Define      ::= '(' 'define' Identifier List? Block ')';
-
-Atom        ::= List | Integer | Float| String | Identifier;
+Atom        ::= List | Integer | Float | String | Identifier | Block;
 
 List        ::= '[' ( Atom )* ']';
 

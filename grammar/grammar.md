@@ -14,42 +14,28 @@ References: [Start](#Start), [Block](#Block), [End](#End)
 
 ![Block](.\diagram/Block.svg)
 
-Used by: [Program](#Program), [Block](#Block), [Define](#Define)
-References: [Block](#Block), [Statement](#Statement)
-
-### Statement
-
-![Statement](.\diagram/Statement.svg)
-
-Used by: [Block](#Block)
-References: [Apply](#Apply), [Define](#Define)
+Used by: [Program](#Program), [Block](#Block), [Atom](#Atom)
+References: [Block](#Block), [Apply](#Apply), [Atom](#Atom)
 
 ### Apply
 
 ![Apply](.\diagram/Apply.svg)
 
-Used by: [Statement](#Statement)
-References: [Identifier](#Identifier), [Atom](#Atom)
-
-### Define
-
-![Define](.\diagram/Define.svg)
-
-Used by: [Statement](#Statement)
-References: [Identifier](#Identifier), [List](#List), [Block](#Block)
+Used by: [Block](#Block), [Apply](#Apply)
+References: [Atom](#Atom), [Apply](#Apply)
 
 ### Atom
 
 ![Atom](.\diagram/Atom.svg)
 
-Used by: [Apply](#Apply), [List](#List)
-References: [List](#List), [Integer](#Integer), [Float](#Float), [String](#String), [Identifier](#Identifier)
+Used by: [Block](#Block), [Apply](#Apply), [List](#List)
+References: [List](#List), [Integer](#Integer), [Float](#Float), [String](#String), [Identifier](#Identifier), [Block](#Block)
 
 ### List
 
 ![List](.\diagram/List.svg)
 
-Used by: [Define](#Define), [Atom](#Atom)
+Used by: [Atom](#Atom)
 References: [Atom](#Atom)
 
 ### Integer
@@ -82,5 +68,5 @@ Used by: [Atom](#Atom)
 
 ![Identifier](.\diagram/Identifier.svg)
 
-Used by: [Apply](#Apply), [Define](#Define), [Atom](#Atom)
+Used by: [Atom](#Atom)
 
