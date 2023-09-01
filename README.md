@@ -8,7 +8,7 @@ Deviated from the original enough that it should probably get a different name b
 ```ebnf
 Program     ::= Start Block End;
 
-Block       ::= '{' ( Block | Apply | Atom )* '}';
+Block       ::= '{' ( Apply | Atom )* '}';
 
 Apply       ::= '(' ( Atom | Apply )+ ')';
 
