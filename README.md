@@ -5,26 +5,7 @@ Deviated from the original enough that it should probably get a different name b
 
 ## Grammar
 
-```ebnf
-Program     ::= Start Block End;
+[Diagrams](./grammar/grammar.md)
 
-Block       ::= '{' ( Apply | Atom )* '}';
+[EBNF](./grammar/grammar.ebnf)
 
-Apply       ::= '(' ( Atom | Apply )+ ')';
-
-Atom        ::= List | Integer | Float | String | Identifier | Block;
-
-List        ::= '[' ( Atom )* ']';
-
-Integer     ::= [ '-' ] ( Digit )+;
-
-Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+;
-
-Digit       ::= '0-9'+;
-
-String      ::= '"' [.]* '"';
-
-Identifier  ::= [.]+;
-```
-
-[Grammar](./grammar/grammar.md)
