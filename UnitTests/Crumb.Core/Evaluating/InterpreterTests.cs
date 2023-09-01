@@ -18,7 +18,7 @@ internal class InterpreterTests
 
         var expected = "Hello, World!";
 
-        var testConsole = ExecuteWithNoArgsAndCaptureOutput(input);
+        var testConsole = CaptureOutputAndExecute(input);
 
         testConsole.Received().Write(expected);
     }
@@ -37,8 +37,29 @@ internal class InterpreterTests
             World!
             """;
 
-        var testConsole = ExecuteWithNoArgsAndCaptureOutput(input);
+        var testConsole = CaptureOutputAndExecute(input);
 
+        testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void ReadInputAndPrint()
+    {
+        var input = """
+            {
+                ( print "Hello " ( inputLine ) "!" )
+            }
+            """;
+
+        var expected = "Hello Bob!";
+
+        var testConsole = CaptureOutput();
+
+        testConsole.ReadLine().Returns("Bob");
+
+        Execute(input);
+
+        testConsole.Received().ReadLine();
         testConsole.Received().Write(expected);
     }
 
@@ -52,13 +73,18 @@ internal class InterpreterTests
         return testConsole;
     }
 
-    private static IConsole ExecuteWithNoArgsAndCaptureOutput(string input)
+    private static void Execute(string input)
     {
         var ast = Parser.Parse(Lexer.Tokenize(input));
 
+        Interpreter.Evaluate(Array.Empty<string>(), ast);
+    }
+
+    private static IConsole CaptureOutputAndExecute(string input)
+    {
         var testConsole = CaptureOutput();
 
-        Interpreter.Evaluate(Array.Empty<string>(), ast);
+        Execute(input);
 
         return testConsole;
     }

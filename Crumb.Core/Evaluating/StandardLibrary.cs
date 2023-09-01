@@ -82,7 +82,7 @@ public static class StandardLibrary
         // IO
         { Names.Print, Print },
         // TODO: input (single char)
-        // TODO: inputLine
+        { Names.InputLine, InputLine }
         // TODO: rows
         // TODO: columns
         // TODO: read_file
@@ -167,6 +167,13 @@ public static class StandardLibrary
         Console.Write(outline.ToString());
 
         return VoidNode.GetInstance();
+    }
+
+    private static StringNode InputLine(int lineNumber, List<Node> args, Scope scope)
+    {
+        var line = Console.ReadLine();
+
+        return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input") : new StringNode(line);
     }
     #endregion
 
