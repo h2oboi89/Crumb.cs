@@ -6,25 +6,25 @@ Deviated from the original enough that it should probably get a different name b
 ## Grammar
 
 ```ebnf
-Program     ::= Start Scope End;
+Program     ::= Start Block End;
 
-Scope       ::= '{' ( Statement )* '}';
+Block       ::= '{' ( Block | Apply | Atom )* '}';
 
-Statement   ::= '(' Identifier ( Atom ) ')';
+Apply       ::= '(' ( Atom | Apply )+ ')';
 
-Atom        ::= List | Integer | Float| String | Identifier | Scope;
+Atom        ::= List | Integer | Float | String | Identifier | Block;
 
-List        ::= '(' ( Atom )* ')';
+List        ::= '[' ( Atom )* ']';
 
 Integer     ::= [ '-' ] ( Digit )+;
 
 Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+;
 
-String      ::= '"' .* '"';
+Digit       ::= '0-9'+;
 
-Identifier  ::= .*;
+String      ::= '"' [.]* '"';
 
-Digit       ::= ( '0-9' )+;
+Identifier  ::= [.]+;
 ```
 
-[Grammar](./grammar/index.md)
+[Grammar](./grammar/grammar.md)
