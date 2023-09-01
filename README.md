@@ -6,13 +6,17 @@ Deviated from the original enough that it should probably get a different name b
 ## Grammar
 
 ```ebnf
-Program     ::= Start Scope End;
+Program     ::= Start Block End;
 
-Scope       ::= '{' ( Statement )* '}';
+Block       ::= '{' ( Block | Statement )* '}';
 
-Statement   ::= '(' Identifier ( Atom ) ')';
+Statement   ::= ( Apply | Define )+;
 
-Atom        ::= List | Integer | Float| String | Identifier | Scope;
+Apply       ::= '(' Identifier ( Atom )* ')';
+
+Define      ::= '(' 'define' Identifier List? Block ')';
+
+Atom        ::= List | Integer | Float| String | Identifier;
 
 List        ::= '[' ( Atom )* ']';
 
@@ -20,15 +24,11 @@ Integer     ::= [ '-' ] ( Digit )+;
 
 Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+;
 
-Digit       ::= [0-9]+;
+Digit       ::= '0-9'+;
 
-String      ::= '"' .* '"';
+String      ::= '"' [.]* '"';
 
-/* NOTE for String: '. matches everything but '"' unless it is escaped with a '\' */
-
-Identifier  ::= .*;
-
-/* NOT for Identifier: '.' matches anything that does not make it an Integer, Float, or String */
+Identifier  ::= [.]+;
 ```
 
-[Grammar](./grammar/index.md)
+[Grammar](./grammar/grammar.md)
