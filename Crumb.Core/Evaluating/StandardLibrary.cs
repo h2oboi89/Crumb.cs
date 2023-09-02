@@ -93,9 +93,8 @@ public static class StandardLibrary
         //// TODO: event ??
         //public const string Use = "use";
 
-        // ??
+        // defining values
         { Names.Define, Define },
-        //public const string Define = "def";
         //public const string Function = "fun";
 
         // comparisons
@@ -166,7 +165,7 @@ public static class StandardLibrary
 
                 if (escapeSequence == null)
                 {
-                    throw new RuntimeException(lineNumber, $"{Names.Print}: invalid escape sequence");
+                    throw new RuntimeException(lineNumber, $"{Names.Print}: invalid escape sequence.");
                 }
                 else
                 {
@@ -189,7 +188,7 @@ public static class StandardLibrary
     {
         var line = Console.ReadLine();
 
-        return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input") : new StringNode(line);
+        return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input.") : new StringNode(line);
     }
 
     private static VoidNode Define(int lineNumber, List<AstNode> args, Scope scope)
@@ -350,7 +349,7 @@ public static class StandardLibrary
     {
         if (args.Count < min)
         {
-            throw new RuntimeException(lineNumber, $"{name} requires at least {min} arguments, got {args.Count}");
+            throw new RuntimeException(lineNumber, $"{name} requires at least {min} arguments, got {args.Count}.");
         }
     }
 
@@ -358,7 +357,7 @@ public static class StandardLibrary
     {
         if (args.Count > max)
         {
-            throw new RuntimeException(lineNumber, $"{name} requires at most {max} arguments, got {args.Count}");
+            throw new RuntimeException(lineNumber, $"{name} requires at most {max} arguments, got {args.Count}.");
         }
     }
 
@@ -369,7 +368,7 @@ public static class StandardLibrary
     {
         if (!expected.Contains(arg.Type))
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected type {arg.Type}, expected one of [ {string.Join(", ", expected)} ]");
+            throw new RuntimeException(lineNumber, $"{name}: unexpected type {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
         }
     }
     private static void ValidateNumber(int lineNumber, List<Node> args, string name) =>

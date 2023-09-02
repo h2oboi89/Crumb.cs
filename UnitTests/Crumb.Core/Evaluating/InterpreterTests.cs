@@ -43,6 +43,15 @@ internal class InterpreterTests
     }
 
     [Test]
+    public static void PrintInvalidEscapeSequence_Throws()
+    {
+        var input = """{ ( print "\d" ) }""";
+
+        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
+            .With.Message.EqualTo("Runtime error @ line 1: print: invalid escape sequence."));
+    }
+
+    [Test]
     public static void ReadInputAndPrint()
     {
         var input = """
@@ -80,6 +89,15 @@ internal class InterpreterTests
         Execute(input);
 
         testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void InvalidDefineTarget_Throws()
+    {
+        var input = "{ ( def 1 2 ) }";
+
+        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
+            .With.Message.EqualTo("Runtime error @ line 1: def requires valid identifier, got Integer."));
     }
 
     [Test]
