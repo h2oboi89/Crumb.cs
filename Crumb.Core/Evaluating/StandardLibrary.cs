@@ -25,7 +25,8 @@ public static class StandardLibrary
         public const string Use = "use";
 
         // ??
-        public const string Define = "def";         // alias with 'define'
+        public const string Define = "def";         // define variable
+        public const string Function = "fun";       // define function
 
         // comparisons
         public const string Is = "is";

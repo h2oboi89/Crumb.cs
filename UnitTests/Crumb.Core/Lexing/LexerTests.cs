@@ -232,10 +232,10 @@ internal class LexerTests
             (
                 """
                 {
-                    ( def foo [ a b ] { + a b } )
-                    ( def bar [ a b ] { - a b } )
-                    ( def baz [ a b ] { ( print ( * ( foo a b ) ( bar a b ) ) ) } )
-                    ( def qux ( baz 7 3 ) )
+                    ( def foo ( fun [ a b ] { + a b } ) )
+                    ( def bar ( fun [ a b ] { - a b } ) )
+                    ( def baz ( fun [ a b ] { ( print ( * ( foo a b ) ( bar a b ) ) ) } ) )
+                    ( def qux ( fun ( baz 7 3 ) ) )
                     
                     ( qux ) // prints 40
                 }
@@ -246,69 +246,81 @@ internal class LexerTests
                 [2] : 2 | ApplyStart
                 [3] : 2 | Identifier 'def'
                 [4] : 2 | Identifier 'foo'
-                [5] : 2 | ListStart
-                [6] : 2 | Identifier 'a'
-                [7] : 2 | Identifier 'b'
-                [8] : 2 | ListEnd
-                [9] : 2 | BlockStart
-                [10] : 2 | Identifier '+'
-                [11] : 2 | Identifier 'a'
-                [12] : 2 | Identifier 'b'
-                [13] : 2 | BlockEnd
-                [14] : 2 | ApplyEnd
-                [15] : 3 | ApplyStart
-                [16] : 3 | Identifier 'def'
-                [17] : 3 | Identifier 'bar'
-                [18] : 3 | ListStart
-                [19] : 3 | Identifier 'a'
-                [20] : 3 | Identifier 'b'
-                [21] : 3 | ListEnd
-                [22] : 3 | BlockStart
-                [23] : 3 | Identifier '-'
+                [5] : 2 | ApplyStart
+                [6] : 2 | Identifier 'fun'
+                [7] : 2 | ListStart
+                [8] : 2 | Identifier 'a'
+                [9] : 2 | Identifier 'b'
+                [10] : 2 | ListEnd
+                [11] : 2 | BlockStart
+                [12] : 2 | Identifier '+'
+                [13] : 2 | Identifier 'a'
+                [14] : 2 | Identifier 'b'
+                [15] : 2 | BlockEnd
+                [16] : 2 | ApplyEnd
+                [17] : 2 | ApplyEnd
+                [18] : 3 | ApplyStart
+                [19] : 3 | Identifier 'def'
+                [20] : 3 | Identifier 'bar'
+                [21] : 3 | ApplyStart
+                [22] : 3 | Identifier 'fun'
+                [23] : 3 | ListStart
                 [24] : 3 | Identifier 'a'
                 [25] : 3 | Identifier 'b'
-                [26] : 3 | BlockEnd
-                [27] : 3 | ApplyEnd
-                [28] : 4 | ApplyStart
-                [29] : 4 | Identifier 'def'
-                [30] : 4 | Identifier 'baz'
-                [31] : 4 | ListStart
-                [32] : 4 | Identifier 'a'
-                [33] : 4 | Identifier 'b'
-                [34] : 4 | ListEnd
-                [35] : 4 | BlockStart
-                [36] : 4 | ApplyStart
-                [37] : 4 | Identifier 'print'
-                [38] : 4 | ApplyStart
-                [39] : 4 | Identifier '*'
-                [40] : 4 | ApplyStart
-                [41] : 4 | Identifier 'foo'
-                [42] : 4 | Identifier 'a'
-                [43] : 4 | Identifier 'b'
-                [44] : 4 | ApplyEnd
-                [45] : 4 | ApplyStart
-                [46] : 4 | Identifier 'bar'
-                [47] : 4 | Identifier 'a'
-                [48] : 4 | Identifier 'b'
-                [49] : 4 | ApplyEnd
-                [50] : 4 | ApplyEnd
-                [51] : 4 | ApplyEnd
-                [52] : 4 | BlockEnd
-                [53] : 4 | ApplyEnd
-                [54] : 5 | ApplyStart
-                [55] : 5 | Identifier 'def'
-                [56] : 5 | Identifier 'qux'
-                [57] : 5 | ApplyStart
-                [58] : 5 | Identifier 'baz'
-                [59] : 5 | Integer '7'
-                [60] : 5 | Integer '3'
-                [61] : 5 | ApplyEnd
-                [62] : 5 | ApplyEnd
-                [63] : 7 | ApplyStart
-                [64] : 7 | Identifier 'qux'
-                [65] : 7 | ApplyEnd
-                [66] : 8 | BlockEnd
-                [67] : 8 | End
+                [26] : 3 | ListEnd
+                [27] : 3 | BlockStart
+                [28] : 3 | Identifier '-'
+                [29] : 3 | Identifier 'a'
+                [30] : 3 | Identifier 'b'
+                [31] : 3 | BlockEnd
+                [32] : 3 | ApplyEnd
+                [33] : 3 | ApplyEnd
+                [34] : 4 | ApplyStart
+                [35] : 4 | Identifier 'def'
+                [36] : 4 | Identifier 'baz'
+                [37] : 4 | ApplyStart
+                [38] : 4 | Identifier 'fun'
+                [39] : 4 | ListStart
+                [40] : 4 | Identifier 'a'
+                [41] : 4 | Identifier 'b'
+                [42] : 4 | ListEnd
+                [43] : 4 | BlockStart
+                [44] : 4 | ApplyStart
+                [45] : 4 | Identifier 'print'
+                [46] : 4 | ApplyStart
+                [47] : 4 | Identifier '*'
+                [48] : 4 | ApplyStart
+                [49] : 4 | Identifier 'foo'
+                [50] : 4 | Identifier 'a'
+                [51] : 4 | Identifier 'b'
+                [52] : 4 | ApplyEnd
+                [53] : 4 | ApplyStart
+                [54] : 4 | Identifier 'bar'
+                [55] : 4 | Identifier 'a'
+                [56] : 4 | Identifier 'b'
+                [57] : 4 | ApplyEnd
+                [58] : 4 | ApplyEnd
+                [59] : 4 | ApplyEnd
+                [60] : 4 | BlockEnd
+                [61] : 4 | ApplyEnd
+                [62] : 4 | ApplyEnd
+                [63] : 5 | ApplyStart
+                [64] : 5 | Identifier 'def'
+                [65] : 5 | Identifier 'qux'
+                [66] : 5 | ApplyStart
+                [67] : 5 | Identifier 'fun'
+                [68] : 5 | ApplyStart
+                [69] : 5 | Identifier 'baz'
+                [70] : 5 | Integer '7'
+                [71] : 5 | Integer '3'
+                [72] : 5 | ApplyEnd
+                [73] : 5 | ApplyEnd
+                [74] : 5 | ApplyEnd
+                [75] : 7 | ApplyStart
+                [76] : 7 | Identifier 'qux'
+                [77] : 7 | ApplyEnd
+                [78] : 8 | BlockEnd
+                [79] : 8 | End
                 """
             ),
         };
