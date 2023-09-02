@@ -1,0 +1,9 @@
+{ 
+    ( print "Enter name:\n" )
+    ( print "> " )
+
+    ( def name ( inputLine ) )
+
+    ( print "Hello, " name "!\n" )
+    ( print "Goodbye!" )
+}
