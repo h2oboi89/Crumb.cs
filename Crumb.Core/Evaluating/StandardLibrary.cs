@@ -1,4 +1,5 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
+using Crumb.Core.Parsing;
 using Crumb.Core.Utility;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -78,68 +79,82 @@ public static class StandardLibrary
         public const string Find = "find";
     }
 
-    public static readonly ReadOnlyDictionary<string, Func<int, List<Node>, Scope, Node>> NativeFunctions = new Dictionary<string, Func<int, List<Node>, Scope, Node>>
+    public static readonly ReadOnlyDictionary<string, Func<int, List<AstNode>, Scope, Node>> NativeFunctions = new Dictionary<string, Func<int, List<AstNode>, Scope, Node>>
     {
         // IO
         { Names.Print, Print },
-        // TODO: input (single char)
-        { Names.InputLine, InputLine }
-        // TODO: rows
-        // TODO: columns
-        // TODO: read_file
-        // TODO: write_file
-        // TODO: event ??
-        // TODO: use
+        //public const string PrintLine = "printLine";
+        //public const string Input = "input";
+        { Names.InputLine, InputLine },
+        //public const string Rows = "rows";
+        //public const string Columns = "columns";
+        //public const string ReadFile = "read";
+        //public const string WriteFile = "write";
+        //// TODO: event ??
+        //public const string Use = "use";
+
+        // ??
+        { Names.Define, Define },
+        //public const string Define = "def";
+        //public const string Function = "fun";
 
         // comparisons
-        // TODO: is
-        // TODO: less_than
-        // TODO: greater_than
+        //public const string Is = "is";
+        //public const string LessThan = "<";
+        //public const string GreaterThan = ">";
+        //public const string Equal = "=";
 
-        // logic operators
-        // TODO: not
-        // TODO: and
-        // TODO: or
+        // logic operators^
+        //public const string Not = "not";
+        //public const string And = "and";
+        //public const string Or = "or";
 
         // arithmetic
-        // TODO: add
-        // TODO: subtract
-        // TODO: multiply
-        // TODO: divide
-        // TODO: remainder
-        // TODO: power
-        // TODO: random
+        { Names.Add, Add },
+        { Names.Subtract, Subtract },
+        { Names.Multiply, Multiply },
+        { Names.Divide, Divide },
+        //public const string Remainder = "%";
+        //public const string Power = "^";
+        //public const string Random = "random";
+
+        // TODO: bitwise? <<, <<<, >>, >>>, &, |, ~, ^
 
         // control
-        // TODO: loop (for)
-        // TODO: until (while)
-        // TODO: if
-        // TODO: wait (thread.sleep)
+        //public const string For = "for";
+        //public const string While = "while";
+        //public const string If = "if";
+        //public const string Wait = "wait";
 
         // types
-        // TODO: integer
-        // TODO: float
-        // TOOD: string
-        // TODO: list
-        // TODO: type ??
+        //public const string Integer = "integer";
+        //public const string Float = "float";
+        //public const string String = "string";
+        //public const string List = "list";
+        //// TODO: type ??
 
         // list and string methods
-        // TODO: length
-        // TODO: join
-        // TODO: get (get @ index)
-        // TODO: set (set @ index)
-        // TODO: insert (insert @ index)
-        // TODO: delete (remove @ index)
-        // TODO: map
-        // TODO: reduce
-        // TODO: range (getRange)
-        // TODO: find
-    }.AsReadOnly();
+        //public const string Length = "length";
+        //public const string Join = "join";
+        //public const string Get = "get";
+        //public const string Set = "set";
+        //public const string Head = "head";
+        //public const string Tail = "tail";
+        //public const string Insert = "insert";
+        //public const string Delete = "delete";
+        //public const string Map = "map";
+        //public const string Reduce = "reduce";
+        //public const string Range = "range";
+        //public const string Find = "find";
+}.AsReadOnly();
 
     #region Native Functions
-    private static VoidNode Print(int lineNumber, List<Node> args, Scope scope)
+    private static VoidNode Print(int lineNumber, List<AstNode> args, Scope scope)
     {
-        var line = string.Join(string.Empty, args.Select(a => a.ToString()));
+        var line = string.Join(string.Empty, 
+            Interpreter.EvaluateArguments(args, scope)
+            .Select(a => a.ToString())
+        );
 
         var outline = new StringBuilder();
 
@@ -170,22 +185,168 @@ public static class StandardLibrary
         return VoidNode.GetInstance();
     }
 
-    private static StringNode InputLine(int lineNumber, List<Node> args, Scope scope)
+    private static StringNode InputLine(int lineNumber, List<AstNode> args, Scope scope)
     {
         var line = Console.ReadLine();
 
         return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input") : new StringNode(line);
     }
+
+    private static VoidNode Define(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateArgCount(lineNumber, args, 2, 2, Names.Define);
+
+        var identifier = args[0];
+        var value = args[1];
+
+        if (identifier.OpCode != OpCodes.Identifier)
+        {
+            throw new RuntimeException(lineNumber, $"{Names.Define} requires valid identifier, got {identifier.OpCode}.");
+        }
+
+        scope.Set(identifier.Value, Interpreter.Evaluate(value, scope));
+
+        // TODO: return evaluated value?
+        return VoidNode.GetInstance();
+    }
+
+    private static Node Add(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateMinArgCount(lineNumber, args, 2, Names.Add);
+
+        var numbers = Interpreter.EvaluateArguments(args, scope);
+        
+        ValidateNumber(lineNumber, numbers, Names.Add);
+
+        if (CheckForFloat(numbers))
+        {
+            var result = GetFloatValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result += GetFloatValue(numbers[i]);
+            }
+
+            return new FloatNode(result);
+        }
+        else
+        {
+            var result = GetIntegerValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result += GetIntegerValue(numbers[i]);
+            }
+
+            return new IntegerNode(result);
+        }
+    }
+
+    private static Node Subtract(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateMinArgCount(lineNumber, args, 2, Names.Subtract);
+
+        var numbers = Interpreter.EvaluateArguments(args, scope);
+
+        ValidateNumber(lineNumber, numbers, Names.Subtract);
+
+        if (CheckForFloat(numbers))
+        {
+            var result = GetFloatValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result -= GetFloatValue(numbers[i]);
+            }
+
+            return new FloatNode(result);
+        }
+        else
+        {
+            var result = GetIntegerValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result -= GetIntegerValue(numbers[i]);
+            }
+
+            return new IntegerNode(result);
+        }
+    }
+
+    private static Node Multiply(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateMinArgCount(lineNumber, args, 2, Names.Multiply);
+
+        var numbers = Interpreter.EvaluateArguments(args, scope);
+
+        ValidateNumber(lineNumber, numbers, Names.Multiply);
+
+        if (CheckForFloat(numbers))
+        {
+            var result = GetFloatValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result *= GetFloatValue(numbers[i]);
+            }
+
+            return new FloatNode(result);
+        }
+        else
+        {
+            var result = GetIntegerValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result *= GetIntegerValue(numbers[i]);
+            }
+
+            return new IntegerNode(result);
+        }
+    }
+
+    private static Node Divide(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateMinArgCount(lineNumber, args, 2, Names.Divide);
+
+        var numbers = Interpreter.EvaluateArguments(args, scope);
+
+        ValidateNumber(lineNumber, numbers, Names.Divide);
+
+        if (CheckForFloat(numbers))
+        {
+            var result = GetFloatValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result /= GetFloatValue(numbers[i]);
+            }
+
+            return new FloatNode(result);
+        }
+        else
+        {
+            var result = GetIntegerValue(numbers[0]);
+
+            for (var i = 1; i < numbers.Count; i++)
+            {
+                result /= GetIntegerValue(numbers[i]);
+            }
+
+            return new IntegerNode(result);
+        }
+    }
     #endregion
 
     #region Helper Methods
-    private static void ValidateArgCount(int lineNumber, List<Node> args, int min, int max, string name)
+    private static void ValidateArgCount<T>(int lineNumber, List<T> args, int min, int max, string name)
     {
         ValidateMinArgCount(lineNumber, args, min, name);
         ValidateMaxArgCount(lineNumber, args, max, name);
     }
 
-    private static void ValidateMinArgCount(int lineNumber, List<Node> args, int min, string name)
+    private static void ValidateMinArgCount<T>(int lineNumber, List<T> args, int min, string name)
     {
         if (args.Count < min)
         {
@@ -193,7 +354,7 @@ public static class StandardLibrary
         }
     }
 
-    private static void ValidateMaxArgCount(int lineNumber, List<Node> args, int max, string name)
+    private static void ValidateMaxArgCount<T>(int lineNumber, List<T> args, int max, string name)
     {
         if (args.Count > max)
         {
@@ -243,18 +404,18 @@ public static class StandardLibrary
 
     private static bool CheckForFloat(List<Node> args) => args.Any(a => a.Type == NodeTypes.Float);
 
-    //private static double GetFloatValue(Node node) => node.Type switch
-    //{
-    //    NodeTypes.Float => ((FloatNode)node).Value,
-    //    NodeTypes.Integer => ((IntegerNode)node).Value,
-    //    _ => throw UnreachableCode,
-    //};
+    private static double GetFloatValue(Node node) => node.Type switch
+    {
+        NodeTypes.Float => ((FloatNode)node).Value,
+        NodeTypes.Integer => ((IntegerNode)node).Value,
+        _ => throw UnreachableCode,
+    };
 
-    //private static int GetIntegerValue(Node node) => node.Type switch
-    //{
-    //    NodeTypes.Integer => ((IntegerNode)node).Value,
-    //    _ => throw UnreachableCode,
-    //};
+    private static int GetIntegerValue(Node node) => node.Type switch
+    {
+    NodeTypes.Integer => ((IntegerNode)node).Value,
+    _ => throw UnreachableCode,
+    };
 
     private static NotImplementedException UnreachableCode =>
         new("unreachable code");

@@ -63,6 +63,97 @@ internal class InterpreterTests
         testConsole.Received().Write(expected);
     }
 
+    [Test]
+    public static void SimpleDefine()
+    {
+        var input = """
+            { 
+                ( def foo 1 )
+                ( print foo )
+            }
+            """;
+
+        var expected = "1";
+
+        var testConsole = CaptureOutput();
+
+        Execute(input);
+
+        testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void SimpleIntegerMath()
+    {
+        var input = """
+            {
+                ( print ( - ( / ( * 5 8 ) ( + 1 3 ) ) 4 ) )
+            }
+            """;
+
+        var expected = "6";
+
+        var testConsole = CaptureOutput();
+
+        Execute(input);
+
+        testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void SimpleFloatMath()
+    {
+        var input = """
+            {
+                ( print ( - ( / ( * 5.0 8.0 ) ( + 1.5 2.5 ) ) 4.5 ) )
+            }
+            """;
+
+        var expected = "5.5";
+
+        var testConsole = CaptureOutput();
+
+        Execute(input);
+
+        testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void SimpleMixedMath()
+    {
+        var input = """
+            {
+                ( print ( - ( / ( * 5 8 ) ( + 1.5 2.5 ) ) 4.5 ) )
+            }
+            """;
+
+        var expected = "5.5";
+
+        var testConsole = CaptureOutput();
+
+        Execute(input);
+
+        testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void EmptyApply_Throws()
+    {
+        var input = "{ ( ) }";
+
+        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
+            .With.Message.EqualTo("Runtime error @ line 1: empty apply."));
+    }
+
+    [Test]
+    public static void ApplyInvalidFunction_Throws()
+    {
+        var input = "{ ( 1 ) }";
+
+        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
+            .With.Message.EqualTo("Runtime error @ line 1: expected function, got '1'."));
+    }
+
     #region Helper Methods
     private static IConsole CaptureOutput()
     {
