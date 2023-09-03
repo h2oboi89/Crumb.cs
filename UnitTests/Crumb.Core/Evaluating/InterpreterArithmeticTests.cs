@@ -134,7 +134,7 @@ internal class InterpreterArithmeticTests
     [Test]
     public static void BasicMath_LessThanMinArgs_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( + 1 ) }",
                 HelperMethods.RuntimeErrorOnLine1("+ requires at least 2 arguments, got 1.")

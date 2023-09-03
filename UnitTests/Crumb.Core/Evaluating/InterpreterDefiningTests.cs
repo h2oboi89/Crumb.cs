@@ -36,7 +36,7 @@ internal static class InterpreterDefiningTests
     [Test]
     public static void InvalidDefineTarget_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( def 1 2 ) }",
                 HelperMethods.RuntimeErrorOnLine1("def: unexpected Integer '1', expected Identifier.")
@@ -47,7 +47,7 @@ internal static class InterpreterDefiningTests
     [Test]
     public static void Define_InvalidArgCount_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( def foo ) }",
                 HelperMethods.RuntimeErrorOnLine1("def requires at least 2 arguments, got 1.")

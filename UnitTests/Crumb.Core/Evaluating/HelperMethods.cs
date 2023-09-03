@@ -23,7 +23,7 @@ internal static class HelperMethods
         Interpreter.Evaluate(Array.Empty<string>(), ast);
     }
 
-    public static void ExecuteForError(params (string input, string error)[] values)
+    public static void ExecuteForRuntimeError(params (string input, string error)[] values)
     {
         foreach (var (input, error) in values)
         {
@@ -32,9 +32,11 @@ internal static class HelperMethods
         }
     }
 
-    public static string RuntimeErrorOnLine1(string error) => RuntimeErrorOnLineN(error, 1);
+    public static string RuntimeErrorOnLine1(string error) =>
+        RuntimeErrorOnLineN(error, 1);
 
-    public static string RuntimeErrorOnLineN(string error, int n) => $"Runtime error @ line {n}: {error}";
+    public static string RuntimeErrorOnLineN(string error, int n) =>
+        $"Runtime error @ line {n}: {error}";
 
     public static IConsole CaptureOutputAndExecute(string input)
     {

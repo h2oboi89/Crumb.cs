@@ -283,11 +283,6 @@ public static class StandardLibrary
 
     private static char? GetEscapeSequence(string line, int i)
     {
-        if (i == line.Length)
-        {
-            return null;
-        }
-
         return line[i] switch
         {
             '\'' => '\'',

@@ -52,9 +52,13 @@ internal static class InterpreterIOTests
     [Test]
     public static void PrintInvalidEscapeSequence_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 """{ ( print "\d" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("print: invalid escape sequence.")
+            ),
+            (
+                """{ ( print "\ " ) }""",
                 HelperMethods.RuntimeErrorOnLine1("print: invalid escape sequence.")
             )
         );

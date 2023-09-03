@@ -110,11 +110,16 @@ internal static class LexerTests
         var values = new (string input, string expected)[]
         {
             (
-                "\"I like\nstrings\"",
+                """
+                "I like
+                strings"
+                """,
                 "Syntax error @ line 1: unexpected new line before string closed."
             ),
             (
-                "\"I like\0strings\"",
+                """
+                "I like // strings
+                """,
                 "Syntax error @ line 1: unexpected end of file before string closed."
             )
         };
@@ -129,7 +134,9 @@ internal static class LexerTests
     [Test]
     public static void String_Simple()
     {
-        var input = "\"I like strings\"";
+        var input = """
+            "I like strings"
+            """;
 
         var expected = """
             [0] : 1 | Start

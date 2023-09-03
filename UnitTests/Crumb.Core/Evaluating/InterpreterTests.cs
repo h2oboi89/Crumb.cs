@@ -5,7 +5,7 @@ internal static class InterpreterTests
     [Test]
     public static void EmptyApply_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( ) }",
                 HelperMethods.RuntimeErrorOnLine1("empty apply.")
@@ -16,7 +16,7 @@ internal static class InterpreterTests
     [Test]
     public static void ApplyInvalidFunction_Throws()
     {
-        HelperMethods.ExecuteForError(
+        HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( 1 ) }",
                 HelperMethods.RuntimeErrorOnLine1("expected function, got '1'.")
