@@ -104,7 +104,7 @@ internal static class InterpreterTests
         HelperMethods.ExecuteForError(
             (
                 "{ ( def 1 2 ) }",
-                HelperMethods.RuntimeErrorOnLine1("def requires valid identifier, got Integer.")
+                HelperMethods.RuntimeErrorOnLine1("def: unexpected Integer '1', expected Identifier.")
             )
         );
     }

@@ -199,11 +199,8 @@ public static class StandardLibrary
         var identifier = args[0];
         var value = args[1];
 
-        if (identifier.OpCode != OpCodes.Identifier)
-        {
-            throw new RuntimeException(lineNumber, $"{Names.Define} requires valid identifier, got {identifier.OpCode}.");
-        }
-
+        ValidateArgType(lineNumber, identifier, Names.Define, OpCodes.Identifier);
+        
         scope.Set(identifier.Value, Interpreter.Evaluate(value, scope));
 
         // TODO: return evaluated value?
@@ -246,6 +243,22 @@ public static class StandardLibrary
         }
     }
 
+    private static void ValidateArgType(int lineNumber, AstNode arg, string name, params OpCodes[] expected)
+    {
+        if (!expected.Contains(arg.OpCode))
+        {
+            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.OpCode} '{arg.Value}', expected one of [ {string.Join(", ", expected)} ].");
+        }
+    }
+
+    private static void ValidateArgType(int lineNumber, AstNode arg, string name, OpCodes expected)
+    {
+        if (arg.OpCode != expected)
+        {
+            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.OpCode} '{arg.Value}', expected {expected}.");
+        }
+    }
+
     private static void ValidateArgsTypes(int lineNumber, List<Node> args, string name, params NodeTypes[] types) =>
         args.ForEach(a => ValidateArgType(lineNumber, a, name, types));
 
@@ -253,7 +266,15 @@ public static class StandardLibrary
     {
         if (!expected.Contains(arg.Type))
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected type {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
+            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
+        }
+    }
+
+    private static void ValidateArgType(int lineNumber, Node arg, string name, NodeTypes expected)
+    {
+        if (arg.Type != expected)
+        {
+            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.Type}, expected {expected}.");
         }
     }
 
