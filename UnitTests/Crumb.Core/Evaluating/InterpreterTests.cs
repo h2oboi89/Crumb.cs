@@ -105,17 +105,34 @@ internal class InterpreterTests
     {
         var input = """
             {
-                ( print ( - ( / ( * 5 8 ) ( + 1 3 ) ) 4 ) )
+                ( print ( + 1 2 ) )
+                ( print " " )
+                ( print ( - 9 5 ) )
+                ( print " " )
+                ( print ( * 7 6 ) )
+                ( print " " )
+                ( print ( / 6 2 ) )
+                ( print " " )
+                ( print ( / 5 3 ) )
             }
             """;
-
-        var expected = "6";
 
         var testConsole = CaptureOutput();
 
         Execute(input);
 
-        testConsole.Received().Write(expected);
+        Received.InOrder(() =>
+        {
+            testConsole.Write("3");
+            testConsole.Write(" ");
+            testConsole.Write("4");
+            testConsole.Write(" ");
+            testConsole.Write("42");
+            testConsole.Write(" ");
+            testConsole.Write("3");
+            testConsole.Write(" ");
+            testConsole.Write("1");
+        });
     }
 
     [Test]
@@ -123,17 +140,30 @@ internal class InterpreterTests
     {
         var input = """
             {
-                ( print ( - ( / ( * 5.0 8.0 ) ( + 1.5 2.5 ) ) 4.5 ) )
+                ( print ( + 2.3 3.1 ) )
+                ( print " " )
+                ( print ( - 3.14 0.25 ) )
+                ( print " " )
+                ( print ( * 3.3 2.0 ) )
+                ( print " " )
+                ( print ( / 5.0 3.0 ) )
             }
             """;
-
-        var expected = "5.5";
 
         var testConsole = CaptureOutput();
 
         Execute(input);
 
-        testConsole.Received().Write(expected);
+        Received.InOrder(() =>
+        {
+            testConsole.Write("5.4");
+            testConsole.Write(" ");
+            testConsole.Write("2.89");
+            testConsole.Write(" ");
+            testConsole.Write("6.6");
+            testConsole.Write(" ");
+            testConsole.Write("1.6666666666666667");
+        });
     }
 
     [Test]
@@ -141,11 +171,34 @@ internal class InterpreterTests
     {
         var input = """
             {
-                ( print ( - ( / ( * 5 8 ) ( + 1.5 2.5 ) ) 4.5 ) )
+                ( print ( / 5 3 ) )
+                ( print " " )
+                ( print ( / 5 3.0 ) )
             }
             """;
 
-        var expected = "5.5";
+        var testConsole = CaptureOutput();
+
+        Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write(" ");
+            testConsole.Write("1.6666666666666667");
+        });
+    }
+
+    [Test]
+    public static void NestedMath()
+    {
+        var input = """
+            {
+                ( print ( / ( + ( * 5 7 ) ( - 8 3 ) ) 4 ) )
+            }
+            """;
+
+        var expected = "10";
 
         var testConsole = CaptureOutput();
 

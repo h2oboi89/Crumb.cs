@@ -3,6 +3,7 @@ using Crumb.Core.Parsing;
 using Crumb.Core.Utility;
 using System.Collections.ObjectModel;
 using System.Text;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Crumb.Core.Evaluating;
 public static class StandardLibrary
@@ -209,133 +210,17 @@ public static class StandardLibrary
         return VoidNode.GetInstance();
     }
 
-    private static Node Add(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        ValidateMinArgCount(lineNumber, args, 2, Names.Add);
+    private static Node Add(int lineNumber, List<AstNode> args, Scope scope) =>
+        ExecuteBasicMathFunction(lineNumber, args, scope, Names.Add);
 
-        var numbers = Interpreter.EvaluateArguments(args, scope);
-        
-        ValidateNumber(lineNumber, numbers, Names.Add);
+    private static Node Subtract(int lineNumber, List<AstNode> args, Scope scope) =>
+        ExecuteBasicMathFunction(lineNumber, args, scope, Names.Subtract);
 
-        if (CheckForFloat(numbers))
-        {
-            var result = GetFloatValue(numbers[0]);
+    private static Node Multiply(int lineNumber, List<AstNode> args, Scope scope) =>
+        ExecuteBasicMathFunction(lineNumber, args, scope, Names.Multiply);
 
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result += GetFloatValue(numbers[i]);
-            }
-
-            return new FloatNode(result);
-        }
-        else
-        {
-            var result = GetIntegerValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result += GetIntegerValue(numbers[i]);
-            }
-
-            return new IntegerNode(result);
-        }
-    }
-
-    private static Node Subtract(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        ValidateMinArgCount(lineNumber, args, 2, Names.Subtract);
-
-        var numbers = Interpreter.EvaluateArguments(args, scope);
-
-        ValidateNumber(lineNumber, numbers, Names.Subtract);
-
-        if (CheckForFloat(numbers))
-        {
-            var result = GetFloatValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result -= GetFloatValue(numbers[i]);
-            }
-
-            return new FloatNode(result);
-        }
-        else
-        {
-            var result = GetIntegerValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result -= GetIntegerValue(numbers[i]);
-            }
-
-            return new IntegerNode(result);
-        }
-    }
-
-    private static Node Multiply(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        ValidateMinArgCount(lineNumber, args, 2, Names.Multiply);
-
-        var numbers = Interpreter.EvaluateArguments(args, scope);
-
-        ValidateNumber(lineNumber, numbers, Names.Multiply);
-
-        if (CheckForFloat(numbers))
-        {
-            var result = GetFloatValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result *= GetFloatValue(numbers[i]);
-            }
-
-            return new FloatNode(result);
-        }
-        else
-        {
-            var result = GetIntegerValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result *= GetIntegerValue(numbers[i]);
-            }
-
-            return new IntegerNode(result);
-        }
-    }
-
-    private static Node Divide(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        ValidateMinArgCount(lineNumber, args, 2, Names.Divide);
-
-        var numbers = Interpreter.EvaluateArguments(args, scope);
-
-        ValidateNumber(lineNumber, numbers, Names.Divide);
-
-        if (CheckForFloat(numbers))
-        {
-            var result = GetFloatValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result /= GetFloatValue(numbers[i]);
-            }
-
-            return new FloatNode(result);
-        }
-        else
-        {
-            var result = GetIntegerValue(numbers[0]);
-
-            for (var i = 1; i < numbers.Count; i++)
-            {
-                result /= GetIntegerValue(numbers[i]);
-            }
-
-            return new IntegerNode(result);
-        }
-    }
+    private static Node Divide(int lineNumber, List<AstNode> args, Scope scope) =>
+        ExecuteBasicMathFunction(lineNumber, args, scope, Names.Divide);
     #endregion
 
     #region Helper Methods
@@ -413,6 +298,48 @@ public static class StandardLibrary
     NodeTypes.Integer => ((IntegerNode)node).Value,
     _ => throw UnreachableCode,
     };
+
+    private static Node ExecuteBasicMathFunction(int lineNumber, List<AstNode> args, Scope scope, string name)
+    {
+        ValidateMinArgCount(lineNumber, args, 2, name);
+
+        var numbers = Interpreter.EvaluateArguments(args, scope);
+
+        ValidateNumber(lineNumber, numbers, name);
+
+        if (CheckForFloat(numbers))
+        {
+            return new FloatNode(numbers.Skip(1).Aggregate(
+                GetFloatValue(numbers[0]),
+                (acc, node) => {
+                    return name switch
+                    {
+                        Names.Add => acc + GetFloatValue(node),
+                        Names.Subtract => acc - GetFloatValue(node),
+                        Names.Multiply => acc * GetFloatValue(node),
+                        Names.Divide => acc / GetFloatValue(node),
+                        _ => throw new RuntimeException(lineNumber, $"invalid math operation {name}"),
+                    };
+                }
+            ));
+        }
+        else
+        {
+            return new IntegerNode(numbers.Skip(1).Aggregate(
+                GetIntegerValue(numbers[0]),
+                (acc, node) => {
+                    return name switch
+                    {
+                        Names.Add => acc + GetIntegerValue(node),
+                        Names.Subtract => acc - GetIntegerValue(node),
+                        Names.Multiply => acc * GetIntegerValue(node),
+                        Names.Divide => acc / GetIntegerValue(node),
+                        _ => throw new RuntimeException(lineNumber, $"invalid math operation {name}"),
+                    };
+                }
+            ));
+        }
+    }
 
     private static NotImplementedException UnreachableCode =>
         new("unreachable code");
