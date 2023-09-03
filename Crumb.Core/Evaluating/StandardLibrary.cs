@@ -26,7 +26,7 @@ public static class StandardLibrary
         // TODO: event ??
         public const string Use = "use";
 
-        // ??
+        // defining
         public const string Define = "def";         // define variable
         public const string Function = "fun";       // define function
 
