@@ -192,6 +192,10 @@ internal class InterpreterTests
     [Test]
     public static void NestedMath()
     {
+        // ( ( 5 * 7 ) + ( 8 - 3 ) ) / 4
+        // ( 35 + 5 ) / 4
+        // 40 / 4
+        // 10
         var input = """
             {
                 ( print ( / ( + ( * 5 7 ) ( - 8 3 ) ) 4 ) )
