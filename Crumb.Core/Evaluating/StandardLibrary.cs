@@ -371,11 +371,9 @@ public static class StandardLibrary
             throw new RuntimeException(lineNumber, $"{name}: unexpected type {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
         }
     }
+
     private static void ValidateNumber(int lineNumber, List<Node> args, string name) =>
         ValidateArgsTypes(lineNumber, args, name, NodeTypes.Integer, NodeTypes.Float);
-
-    private static void ValidateFunction(int lineNumber, Node arg, string name) =>
-        ValidateArgType(lineNumber, arg, name, NodeTypes.Function, NodeTypes.NativeFunction);
 
     private static char? GetEscapeSequence(string line, int i)
     {
