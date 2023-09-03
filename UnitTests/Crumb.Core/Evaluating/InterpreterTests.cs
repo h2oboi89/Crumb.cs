@@ -7,6 +7,7 @@ using NSubstitute;
 namespace UnitTests.Crumb.Core.Evaluating;
 internal class InterpreterTests
 {
+    #region Tests
     [Test]
     public static void HelloWorld()
     {
@@ -45,10 +46,12 @@ internal class InterpreterTests
     [Test]
     public static void PrintInvalidEscapeSequence_Throws()
     {
-        var input = """{ ( print "\d" ) }""";
-
-        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
-            .With.Message.EqualTo("Runtime error @ line 1: print: invalid escape sequence."));
+        ExecuteForError(
+            (
+                """{ ( print "\d" ) }""",
+                RuntimeErrorOnLine1("print: invalid escape sequence.")
+            )
+        );
     }
 
     [Test]
@@ -94,10 +97,27 @@ internal class InterpreterTests
     [Test]
     public static void InvalidDefineTarget_Throws()
     {
-        var input = "{ ( def 1 2 ) }";
+        ExecuteForError(
+            (
+                "{ ( def 1 2 ) }",
+                RuntimeErrorOnLine1("def requires valid identifier, got Integer.")
+            )
+        );
+    }
 
-        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
-            .With.Message.EqualTo("Runtime error @ line 1: def requires valid identifier, got Integer."));
+    [Test]
+    public static void Define_InvalidArgCount_Throws()
+    {
+        ExecuteForError(
+            (
+                "{ ( def foo ) }",
+                RuntimeErrorOnLine1("def requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( def foo 1 2 ) }",
+                RuntimeErrorOnLine1("def requires at most 2 arguments, got 3.")
+            )
+        );
     }
 
     [Test]
@@ -218,22 +238,50 @@ internal class InterpreterTests
     }
 
     [Test]
+    public static void BasicMath_LessThanMinArgs_Throws()
+    {
+        ExecuteForError(
+            (
+                "{ ( + 1 ) }", 
+                RuntimeErrorOnLine1("+ requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( - 1 ) }", 
+                RuntimeErrorOnLine1("- requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( * 1 ) }", 
+                RuntimeErrorOnLine1("* requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( / 1 ) }", 
+                RuntimeErrorOnLine1("/ requires at least 2 arguments, got 1.")
+            )
+        );
+    }
+
+    [Test]
     public static void EmptyApply_Throws()
     {
-        var input = "{ ( ) }";
-
-        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
-            .With.Message.EqualTo("Runtime error @ line 1: empty apply."));
+        ExecuteForError(
+            (
+                "{ ( ) }",
+                RuntimeErrorOnLine1("empty apply.")
+            )
+        );
     }
 
     [Test]
     public static void ApplyInvalidFunction_Throws()
     {
-        var input = "{ ( 1 ) }";
-
-        Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
-            .With.Message.EqualTo("Runtime error @ line 1: expected function, got '1'."));
+        ExecuteForError(
+            (
+                "{ ( 1 ) }",
+                RuntimeErrorOnLine1("expected function, got '1'.")
+            )
+        );
     }
+    #endregion
 
     #region Helper Methods
     private static IConsole CaptureOutput()
@@ -252,6 +300,19 @@ internal class InterpreterTests
         Interpreter.Evaluate(Array.Empty<string>(), ast);
     }
 
+    private static void ExecuteForError(params (string input, string error)[] values)
+    {
+        foreach (var (input, error) in values)
+        {
+            Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
+                .With.Message.EqualTo(error));
+        }
+    }
+
+    private static string RuntimeErrorOnLine1(string error) => RuntimeErrorOnLineN(error, 1);
+
+    private static string RuntimeErrorOnLineN(string error, int n) => $"Runtime error @ line {n}: {error}";
+
     private static IConsole CaptureOutputAndExecute(string input)
     {
         var testConsole = CaptureOutput();
@@ -262,7 +323,7 @@ internal class InterpreterTests
     }
 
     [TearDown]
-    public void FreeConsole()
+    public void ResetConsole()
     {
         StandardLibrary.Console = new SystemConsole();
     }
