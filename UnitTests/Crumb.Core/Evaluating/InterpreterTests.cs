@@ -1,12 +1,16 @@
-﻿using Crumb.Core.Evaluating;
-using Crumb.Core.Lexing;
-using Crumb.Core.Parsing;
-using Crumb.Core.Utility;
-using NSubstitute;
+﻿using NSubstitute;
 
 namespace UnitTests.Crumb.Core.Evaluating;
-internal class InterpreterTests
+internal static class InterpreterTests
 {
+    #region Setup / TearDown
+    [TearDown]
+    public static void Reset()
+    {
+        HelperMethods.ResetConsole();
+    }
+    #endregion
+
     #region Tests
     [Test]
     public static void HelloWorld()
@@ -19,7 +23,7 @@ internal class InterpreterTests
 
         var expected = "Hello, World!";
 
-        var testConsole = CaptureOutputAndExecute(input);
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
 
         testConsole.Received().Write(expected);
     }
@@ -38,7 +42,7 @@ internal class InterpreterTests
             World!
             """;
 
-        var testConsole = CaptureOutputAndExecute(input);
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
 
         testConsole.Received().Write(expected);
     }
@@ -46,10 +50,10 @@ internal class InterpreterTests
     [Test]
     public static void PrintInvalidEscapeSequence_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 """{ ( print "\d" ) }""",
-                RuntimeErrorOnLine1("print: invalid escape sequence.")
+                HelperMethods.RuntimeErrorOnLine1("print: invalid escape sequence.")
             )
         );
     }
@@ -65,11 +69,11 @@ internal class InterpreterTests
 
         var expected = "Hello Bob!";
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
         testConsole.ReadLine().Returns("Bob");
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         testConsole.Received().ReadLine();
         testConsole.Received().Write(expected);
@@ -87,9 +91,9 @@ internal class InterpreterTests
 
         var expected = "1";
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         testConsole.Received().Write(expected);
     }
@@ -97,10 +101,10 @@ internal class InterpreterTests
     [Test]
     public static void InvalidDefineTarget_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 "{ ( def 1 2 ) }",
-                RuntimeErrorOnLine1("def requires valid identifier, got Integer.")
+                HelperMethods.RuntimeErrorOnLine1("def requires valid identifier, got Integer.")
             )
         );
     }
@@ -108,14 +112,14 @@ internal class InterpreterTests
     [Test]
     public static void Define_InvalidArgCount_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 "{ ( def foo ) }",
-                RuntimeErrorOnLine1("def requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("def requires at least 2 arguments, got 1.")
             ),
             (
                 "{ ( def foo 1 2 ) }",
-                RuntimeErrorOnLine1("def requires at most 2 arguments, got 3.")
+                HelperMethods.RuntimeErrorOnLine1("def requires at most 2 arguments, got 3.")
             )
         );
     }
@@ -137,9 +141,9 @@ internal class InterpreterTests
             }
             """;
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         Received.InOrder(() =>
         {
@@ -170,9 +174,9 @@ internal class InterpreterTests
             }
             """;
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         Received.InOrder(() =>
         {
@@ -197,9 +201,9 @@ internal class InterpreterTests
             }
             """;
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         Received.InOrder(() =>
         {
@@ -230,9 +234,9 @@ internal class InterpreterTests
 
         var expected = "10";
 
-        var testConsole = CaptureOutput();
+        var testConsole = HelperMethods.CaptureOutput();
 
-        Execute(input);
+        HelperMethods.Execute(input);
 
         testConsole.Received().Write(expected);
     }
@@ -240,22 +244,22 @@ internal class InterpreterTests
     [Test]
     public static void BasicMath_LessThanMinArgs_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 "{ ( + 1 ) }", 
-                RuntimeErrorOnLine1("+ requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("+ requires at least 2 arguments, got 1.")
             ),
             (
                 "{ ( - 1 ) }", 
-                RuntimeErrorOnLine1("- requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("- requires at least 2 arguments, got 1.")
             ),
             (
                 "{ ( * 1 ) }", 
-                RuntimeErrorOnLine1("* requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("* requires at least 2 arguments, got 1.")
             ),
             (
                 "{ ( / 1 ) }", 
-                RuntimeErrorOnLine1("/ requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("/ requires at least 2 arguments, got 1.")
             )
         );
     }
@@ -263,10 +267,10 @@ internal class InterpreterTests
     [Test]
     public static void EmptyApply_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 "{ ( ) }",
-                RuntimeErrorOnLine1("empty apply.")
+                HelperMethods.RuntimeErrorOnLine1("empty apply.")
             )
         );
     }
@@ -274,58 +278,12 @@ internal class InterpreterTests
     [Test]
     public static void ApplyInvalidFunction_Throws()
     {
-        ExecuteForError(
+        HelperMethods.ExecuteForError(
             (
                 "{ ( 1 ) }",
-                RuntimeErrorOnLine1("expected function, got '1'.")
+                HelperMethods.RuntimeErrorOnLine1("expected function, got '1'.")
             )
         );
-    }
-    #endregion
-
-    #region Helper Methods
-    private static IConsole CaptureOutput()
-    {
-        var testConsole = Substitute.For<IConsole>();
-
-        StandardLibrary.Console = testConsole;
-
-        return testConsole;
-    }
-
-    private static void Execute(string input)
-    {
-        var ast = Parser.Parse(Lexer.Tokenize(input));
-
-        Interpreter.Evaluate(Array.Empty<string>(), ast);
-    }
-
-    private static void ExecuteForError(params (string input, string error)[] values)
-    {
-        foreach (var (input, error) in values)
-        {
-            Assert.That(() => Execute(input), Throws.TypeOf<RuntimeException>()
-                .With.Message.EqualTo(error));
-        }
-    }
-
-    private static string RuntimeErrorOnLine1(string error) => RuntimeErrorOnLineN(error, 1);
-
-    private static string RuntimeErrorOnLineN(string error, int n) => $"Runtime error @ line {n}: {error}";
-
-    private static IConsole CaptureOutputAndExecute(string input)
-    {
-        var testConsole = CaptureOutput();
-
-        Execute(input);
-
-        return testConsole;
-    }
-
-    [TearDown]
-    public void ResetConsole()
-    {
-        StandardLibrary.Console = new SystemConsole();
     }
     #endregion
 }

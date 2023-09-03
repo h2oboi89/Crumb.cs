@@ -4,7 +4,7 @@ using Crumb.Core.Parsing;
 namespace UnitTests.Crumb.Core.Parsing;
 
 [TestFixture]
-internal class ParserTests
+internal static class ParserTests
 {
     [Test]
     public static void EmptyString_ThrowsParsingException()

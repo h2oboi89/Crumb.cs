@@ -3,7 +3,7 @@
 namespace UnitTests.Crumb.Core.Lexing;
 
 [TestFixture]
-internal class LexerTests
+internal static class LexerTests
 {
 
     [Test]
