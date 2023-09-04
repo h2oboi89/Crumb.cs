@@ -242,7 +242,7 @@ internal static class LexerTests
                     ( def foo ( fun [ a b ] { + a b } ) )
                     ( def bar ( fun [ a b ] { - a b } ) )
                     ( def baz ( fun [ a b ] { ( print ( * ( foo a b ) ( bar a b ) ) ) } ) )
-                    ( def qux ( fun ( baz 7 3 ) ) )
+                    ( def qux ( fun { ( baz 7 3 ) } ) )
                     
                     ( qux ) // prints 40
                 }
@@ -316,18 +316,20 @@ internal static class LexerTests
                 [65] : 5 | Identifier 'qux'
                 [66] : 5 | ApplyStart
                 [67] : 5 | Identifier 'fun'
-                [68] : 5 | ApplyStart
-                [69] : 5 | Identifier 'baz'
-                [70] : 5 | Integer '7'
-                [71] : 5 | Integer '3'
-                [72] : 5 | ApplyEnd
+                [68] : 5 | BlockStart
+                [69] : 5 | ApplyStart
+                [70] : 5 | Identifier 'baz'
+                [71] : 5 | Integer '7'
+                [72] : 5 | Integer '3'
                 [73] : 5 | ApplyEnd
-                [74] : 5 | ApplyEnd
-                [75] : 7 | ApplyStart
-                [76] : 7 | Identifier 'qux'
-                [77] : 7 | ApplyEnd
-                [78] : 8 | BlockEnd
-                [79] : 8 | End
+                [74] : 5 | BlockEnd
+                [75] : 5 | ApplyEnd
+                [76] : 5 | ApplyEnd
+                [77] : 7 | ApplyStart
+                [78] : 7 | Identifier 'qux'
+                [79] : 7 | ApplyEnd
+                [80] : 8 | BlockEnd
+                [81] : 8 | End
                 """
             ),
         };
