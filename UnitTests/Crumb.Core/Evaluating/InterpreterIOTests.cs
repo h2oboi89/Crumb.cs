@@ -31,22 +31,29 @@ internal static class InterpreterIOTests
     }
 
     [Test]
-    public static void PrintWithNewLine()
+    public static void PrintWithEscapeSequences()
     {
-        var input = """
-            {
-                ( print "Hello\r\nWorld!" )
-            }
-            """;
-
-        var expected = """
+        var values = new (string input, string expected)[]
+        {
+            (
+            """ { ( print "Hello\r\nWorld!" ) } """,
+            """
             Hello
             World!
-            """;
+            """
+            ),
+            (
+            """ { ( print " \t \" \' \\ \b \0" ) } """,
+            " \t \" \' \\ \b \0"
+            )
+        };
 
-        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+        foreach (var (input, expected) in values)
+        {
+            var testConsole = HelperMethods.CaptureOutputAndExecute(input);
 
-        testConsole.Received().Write(expected);
+            testConsole.Received().Write(expected);
+        }
     }
 
     [Test]
