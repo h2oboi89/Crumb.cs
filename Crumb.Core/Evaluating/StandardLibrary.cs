@@ -3,7 +3,6 @@ using Crumb.Core.Parsing;
 using Crumb.Core.Utility;
 using System.Collections.ObjectModel;
 using System.Text;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Crumb.Core.Evaluating;
 public static class StandardLibrary
@@ -306,13 +305,13 @@ public static class StandardLibrary
     {
         NodeTypes.Float => ((FloatNode)node).Value,
         NodeTypes.Integer => ((IntegerNode)node).Value,
-        _ => throw UnreachableCode,
+        _ => throw UnreachableCode($"expected float or integer, got {node.Type}"),
     };
 
     private static int GetIntegerValue(Node node) => node.Type switch
     {
-    NodeTypes.Integer => ((IntegerNode)node).Value,
-    _ => throw UnreachableCode,
+        NodeTypes.Integer => ((IntegerNode)node).Value,
+        _ => throw UnreachableCode($"expected integer, got {node.Type}"),
     };
 
     private static Node ExecuteBasicMathFunction(int lineNumber, List<AstNode> args, Scope scope, string name)
@@ -334,7 +333,7 @@ public static class StandardLibrary
                         Names.Subtract => acc - GetFloatValue(node),
                         Names.Multiply => acc * GetFloatValue(node),
                         Names.Divide => acc / GetFloatValue(node),
-                        _ => throw new RuntimeException(lineNumber, $"invalid math operation {name}"),
+                        _ => throw UnreachableCode($"invalid math operation {name}")
                     };
                 }
             ));
@@ -350,14 +349,14 @@ public static class StandardLibrary
                         Names.Subtract => acc - GetIntegerValue(node),
                         Names.Multiply => acc * GetIntegerValue(node),
                         Names.Divide => acc / GetIntegerValue(node),
-                        _ => throw new RuntimeException(lineNumber, $"invalid math operation {name}"),
+                        _ => throw UnreachableCode($"invalid math operation {name}")
                     };
                 }
             ));
         }
     }
 
-    private static NotImplementedException UnreachableCode =>
-        new("unreachable code");
+    private static NotImplementedException UnreachableCode(string error) =>
+        new($"unreachable code : {error}");
     #endregion
 }
