@@ -3,7 +3,7 @@
 namespace UnitTests.Crumb.Core.Evaluating;
 
 [TestFixture]
-internal static class InterpreterDefiningTests
+internal static class InterpreterStateTests
 {
     #region Setup / TearDown
     [TearDown]

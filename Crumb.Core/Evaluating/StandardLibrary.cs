@@ -27,6 +27,7 @@ public static class StandardLibrary
 
         // defining
         public const string Define = "def";         // define variable
+        public const string Update = "mut";         // update variable
         public const string Function = "fun";       // define function
 
         // comparisons
