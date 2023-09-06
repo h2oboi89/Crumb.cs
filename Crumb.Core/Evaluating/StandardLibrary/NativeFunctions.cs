@@ -10,7 +10,6 @@ internal class NativeFunctions
     internal static VoidNode Print(int lineNumber, List<Node> args, Scope scope)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
-        // TODO: should strings get quotes when printed? - Yes
         var line = string.Join(string.Empty, args.Select(a => a.ToString()));
 
         var outline = new StringBuilder();

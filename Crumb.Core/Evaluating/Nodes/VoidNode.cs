@@ -9,7 +9,7 @@ internal class VoidNode : Node
 
     protected override int ValueGetHashCode() => new HashCode().ToHashCode();
 
-    public override string ToString() => "void";
+    public override string ToString() => ((VoidValue)Value).ToString();
 
     public static VoidNode GetInstance() => _instance;
 }
