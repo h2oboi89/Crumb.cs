@@ -25,9 +25,9 @@ public static class StandardLibrary
         // TODO: event ??
         public const string Use = "use";
 
-        // defining
+        // scope state
         public const string Define = "def";         // define variable
-        public const string Update = "mut";         // update variable
+        public const string Mutate = "mut";         // update variable
         public const string Function = "fun";       // define function
 
         // comparisons
@@ -94,8 +94,9 @@ public static class StandardLibrary
         //// TODO: event ??
         //public const string Use = "use";
 
-        // defining values
+        // scope state
         { Names.Define, Define },
+        { Names.Mutate, Mutate },
         //public const string Function = "fun";
 
         // comparisons
@@ -203,7 +204,23 @@ public static class StandardLibrary
         
         scope.Set(identifier.Value, Interpreter.Evaluate(value, scope));
 
-        // TODO: return evaluated value?
+        return VoidNode.GetInstance();
+    }
+
+    private static VoidNode Mutate(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        ValidateArgCount(lineNumber, args, 2, 2, Names.Mutate);
+
+        var identifier = args[0];
+        var value = args[1];
+
+        ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
+
+        if (!scope.Update(identifier.Value, Interpreter.Evaluate(value, scope)))
+        {
+            throw RuntimeException.UndefinedReference(lineNumber, identifier.Value);
+        }
+
         return VoidNode.GetInstance();
     }
 

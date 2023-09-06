@@ -112,7 +112,7 @@ public static class Interpreter
     {
         var value = scope.Get(node.Value);
 
-        return value ?? throw new RuntimeException(node.LineNumber, $"undefined reference to '{node.Value}'.");
+        return value ?? throw RuntimeException.UndefinedReference(node.LineNumber, node.Value);
     }
 
     private static Node EvaluateNativeFunction(int lineNumber, NativeFunctionNode node, List<AstNode> args, Scope scope) =>

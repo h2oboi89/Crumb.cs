@@ -11,6 +11,22 @@ public class Scope
 
     public void Set(string name, Node value) => Values[name] = value;
 
+    public bool Update(string name, Node value)
+    {
+        if (Values.ContainsKey(name))
+        {
+            Values[name] = value;
+            return true;
+        }
+
+        if (Parent != null)
+        {
+            return Parent.Update(name, value);
+        }
+
+        return false;
+    }
+
     public Node? Get(string name)
     {
         if (Values.TryGetValue(name, out Node? value)) return value;

@@ -15,22 +15,33 @@ internal static class InterpreterStateTests
 
     #region Tests
     [Test]
-    public static void SimpleDefine()
+    public static void Define_Update_Get()
     {
         var input = """
             { 
                 ( def foo 1 )
                 ( print foo )
+                ( mut foo 2 )
+                ( print foo )
+
+                {
+                    ( mut foo 3 )
+                    ( print foo )
+                }
+
+                ( print foo )
             }
             """;
 
-        var expected = "1";
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
 
-        var testConsole = HelperMethods.CaptureOutput();
-
-        HelperMethods.Execute(input);
-
-        testConsole.Received().Write(expected);
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write("2");
+            testConsole.Write("3");
+            testConsole.Write("3");
+        });
     }
 
     [Test]
@@ -40,6 +51,39 @@ internal static class InterpreterStateTests
             (
                 "{ ( def 1 2 ) }",
                 HelperMethods.RuntimeErrorOnLine1("def: unexpected Integer '1', expected Identifier.")
+            )
+        );
+    }
+
+    [Test]
+    public static void UndefinedReference_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                "{ ( print foo ) }",
+                HelperMethods.RuntimeErrorOnLine1("undefined reference to 'foo'.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Mutate_Undefined_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                "{ ( mut foo 1 ) }",
+                HelperMethods.RuntimeErrorOnLine1("undefined reference to 'foo'.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Mutate_NestedBlocks_Undefined_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                "{ { ( mut foo 1 ) } }",
+                HelperMethods.RuntimeErrorOnLine1("undefined reference to 'foo'.")
             )
         );
     }
