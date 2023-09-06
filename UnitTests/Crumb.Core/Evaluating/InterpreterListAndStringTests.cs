@@ -24,4 +24,25 @@ internal class InterpreterListAndStringTests
             testConsole.Write("4");
         });
     }
+
+    [Test]
+    public static void Reduce_IteratesList()
+    {
+        var input = """
+            {
+                ( print
+                    (
+                        reduce
+                        [ 1 2 3 4 ]
+                        ( fun [ acc item i ] { ( + acc item ) } )
+                        0
+                    )
+                )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("10");
+    }
 }

@@ -64,7 +64,7 @@ internal class NativeFunctions
     internal static Node Divide(int lineNumber, List<Node> args, Scope scope) =>
         HelperMethods.ExecuteBasicMathFunction(lineNumber, args, scope, Names.Divide);
 
-    internal static Node Map(int lineNumber, List<Node> args, Scope scope)
+    internal static ListNode Map(int lineNumber, List<Node> args, Scope scope)
     {
         HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Map);
 
@@ -88,5 +88,37 @@ internal class NativeFunctions
         }
 
         return new ListNode(result);
+    }
+
+    internal static Node Reduce(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 2, 3, Names.Reduce);
+
+        HelperMethods.ValidateArgType(lineNumber, args[0], Names.Map, NodeTypes.List);
+        var list = (ListNode)args[0];
+
+        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Map, NodeTypes.Function, NodeTypes.NativeFunction);
+        var function = args[1];
+
+        var accumulator = (Node)VoidNode.GetInstance();
+
+        if (args.Count == 3)
+        {
+            accumulator = args[2];
+        }
+
+        for(var i = 0; i < list.Value.Count; i++)
+        {
+            var reduceFuncArgs = new List<Node>
+            {
+                accumulator,
+                list.Value[i],
+                new IntegerNode(i),
+            };
+
+            accumulator = Interpreter.ExecuteFunction(lineNumber, function, reduceFuncArgs, scope);
+        }
+
+        return accumulator;
     }
 }

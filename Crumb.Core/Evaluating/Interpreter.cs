@@ -170,6 +170,7 @@ public static class Interpreter
         }
         else
         {
+            // should be handled by lexer
             throw new RuntimeException(node.LineNumber, $"invalid value for integer: '{node.Value}'.");
         }
     }
@@ -182,6 +183,7 @@ public static class Interpreter
         }
         else
         {
+            // should be handled by lexer
             throw new RuntimeException(node.LineNumber, $"invalid value for integer: '{node.Value}'");
         }
     }
@@ -192,6 +194,7 @@ public static class Interpreter
     {
         var value = scope.Get(node.Value);
 
+        // should be handled by lexer
         return value ?? throw RuntimeException.UndefinedReference(node.LineNumber, node.Value);
     }
 

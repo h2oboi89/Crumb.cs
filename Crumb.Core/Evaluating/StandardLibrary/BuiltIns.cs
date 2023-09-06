@@ -65,7 +65,7 @@ public static class BuiltIns
         //public const string Insert = "insert";
         //public const string Delete = "delete";
         { Names.Map, StandardLibrary.NativeFunctions.Map },
-        //public const string Reduce = "reduce";
+        { Names.Reduce, StandardLibrary.NativeFunctions.Reduce },
         //public const string Range = "range";
         //public const string Find = "find";
     }.AsReadOnly();
