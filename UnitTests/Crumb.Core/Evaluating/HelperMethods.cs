@@ -1,4 +1,5 @@
 ﻿using Crumb.Core.Evaluating;
+using Crumb.Core.Evaluating.StandardLibrary;
 using Crumb.Core.Lexing;
 using Crumb.Core.Parsing;
 using Crumb.Core.Utility;
@@ -11,7 +12,7 @@ internal static class HelperMethods
     {
         var testConsole = Substitute.For<IConsole>();
 
-        StandardLibrary.Console = testConsole;
+        BuiltIns.Console = testConsole;
 
         return testConsole;
     }
@@ -49,6 +50,6 @@ internal static class HelperMethods
 
     public static void ResetConsole()
     {
-        StandardLibrary.Console = new SystemConsole();
+        BuiltIns.Console = new SystemConsole();
     }
 }

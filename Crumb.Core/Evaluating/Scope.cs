@@ -45,10 +45,12 @@ public class Scope
         // constants
         scope.Set("void", VoidNode.GetInstance());
 
-        foreach (var (name, function) in StandardLibrary.NativeFunctions)
+        foreach (var (name, function) in StandardLibrary.BuiltIns.NativeFunctions)
         {
             scope.Set(name, new NativeFunctionNode(function));
         }
+
+        // TODO: built in functions (non-native)
 
         return scope;
     }
