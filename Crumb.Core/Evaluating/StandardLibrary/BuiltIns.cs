@@ -56,7 +56,7 @@ public static class BuiltIns
 
         // list and string methods
         { Names.Length, StandardLibrary.NativeFunctions.Length },
-        //public const string Join = "join";
+        { Names.Join, StandardLibrary.NativeFunctions.Join },
         //public const string Get = "get";
         //public const string Set = "set";
         //public const string Head = "head";

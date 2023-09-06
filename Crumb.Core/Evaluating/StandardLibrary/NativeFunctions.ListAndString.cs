@@ -1,4 +1,5 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
+using System.Text;
 
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal partial class NativeFunctions
@@ -16,6 +17,39 @@ internal partial class NativeFunctions
             NodeTypes.String => new IntegerNode(((StringNode)args[0]).Value.Length),
             _ => throw HelperMethods.UnreachableCode($"{Names.Length}: expected string or list"),
         };
+    }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+    internal static Node Join(int lineNumber, List<Node> args, Scope scope)
+#pragma warning restore IDE0060 // Remove unused parameter
+    {
+        HelperMethods.ValidateMinArgCount(lineNumber, args, 2, Names.Join);
+
+        if (HelperMethods.AreAllArgs(args, NodeTypes.List))
+        {
+            var values = new List<Node>();
+
+            foreach (var list in args)
+            {
+                values.AddRange(((ListNode)list).Value);
+            }
+
+            return new ListNode(values);
+        }
+
+        if (HelperMethods.AreAllArgs(args, NodeTypes.String))
+        {
+            var sb = new StringBuilder();
+
+            foreach (var str in args)
+            {
+                sb.Append(((StringNode)str).Value);
+            }
+
+            return new StringNode(sb.ToString());
+        }
+
+        throw new RuntimeException(lineNumber, $"{Names.Join}: expected all lists or all strings.");
     }
 
     internal static ListNode Map(int lineNumber, List<Node> args, Scope scope)

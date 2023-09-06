@@ -56,6 +56,9 @@ internal class HelperMethods
         }
     }
 
+    internal static bool AreAllArgs(List<Node> args, NodeTypes expected) =>
+        args.All(a => a.Type == expected);
+
     internal static void ValidateArgType(int lineNumber, Node arg, string name, NodeTypes expected)
     {
         if (arg.Type != expected)

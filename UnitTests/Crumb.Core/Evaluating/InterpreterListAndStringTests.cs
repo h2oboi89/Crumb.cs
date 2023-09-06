@@ -42,6 +42,52 @@ internal class InterpreterListAndStringTests
     }
 
     [Test]
+    public static void Length_InvalidType_Throws()
+    {
+        var input = "{ ( len 1 ) }";
+        var expected = HelperMethods.RuntimeErrorOnLine1("len: unexpected Integer, expected one of [ List, String ].");
+
+        HelperMethods.ExecuteForRuntimeError((input, expected));
+    }
+
+    [Test]
+    public static void Join_Lists_MergesLists()
+    {
+        var input = """
+            {
+                ( print ( join [ 1 ] [ 2 ] [ 3 ] [ 4 ] ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("[ 1, 2, 3, 4 ]");
+    }
+
+    [Test]
+    public static void Join_Strings_MergesStrings()
+    {
+        var input = """
+            {
+                ( print ( join "foo" " " "bar" ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("foo bar");
+    }
+
+    [Test]
+    public static void Join_InvalidTypes_Throws()
+    {
+        var input = """{ ( join [ ] "foo" ) }""";
+        var expected = HelperMethods.RuntimeErrorOnLine1("join: expected all lists or all strings.");
+
+        HelperMethods.ExecuteForRuntimeError((input, expected));
+    }
+
+    [Test]
     public static void Map_IteratesList()
     {
         var input = """
