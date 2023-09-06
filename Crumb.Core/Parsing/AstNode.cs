@@ -23,6 +23,8 @@ public class AstNode
 
     public void Append(AstNode child) => Children.Add(child);
 
+    // TODO: implement GetHashCode?
+
     public string ToString(int depth)
     {
         var sb = new StringBuilder();

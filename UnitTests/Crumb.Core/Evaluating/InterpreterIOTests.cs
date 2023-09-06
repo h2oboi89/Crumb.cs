@@ -91,5 +91,25 @@ internal static class InterpreterIOTests
         testConsole.Received().ReadLine();
         testConsole.Received().Write(expected);
     }
+
+    [Test]
+    public static void PrintLine()
+    {
+        var input = """
+            {
+                ( print "Hello, World!" )
+                ( printLine "Hello, World!" )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("Hello, World!");
+            testConsole.Write("Hello, World!");
+            testConsole.Write($"{Environment.NewLine}");
+        });
+    }
     #endregion
 }

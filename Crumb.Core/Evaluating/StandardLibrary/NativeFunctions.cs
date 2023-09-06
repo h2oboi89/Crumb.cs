@@ -1,16 +1,16 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
-using Crumb.Core.Parsing;
 using System.Text;
 
 namespace Crumb.Core.Evaluating.StandardLibrary;
+
+// TODO: make partial class and split up functions according to grouping in Names?
 internal class NativeFunctions
 {
-    internal static VoidNode Print(int lineNumber, List<AstNode> args, Scope scope)
+#pragma warning disable IDE0060 // Remove unused parameter
+    internal static VoidNode Print(int lineNumber, List<Node> args, Scope scope)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
-        var line = string.Join(string.Empty,
-            Interpreter.EvaluateArguments(args, scope)
-            .Select(a => a.ToString())
-        );
+        var line = string.Join(string.Empty, args.Select(a => a.ToString()));
 
         var outline = new StringBuilder();
 
@@ -41,56 +41,52 @@ internal class NativeFunctions
         return VoidNode.GetInstance();
     }
 
-    // TODO: move to wrap entire file?
 #pragma warning disable IDE0060 // Remove unused parameter
-    internal static StringNode InputLine(int lineNumber, List<AstNode> args, Scope scope)
+    internal static StringNode InputLine(int lineNumber, List<Node> args, Scope scope)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
+        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.InputLine);
+
         var line = BuiltIns.Console.ReadLine();
 
         return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input.") : new StringNode(line);
     }
 
-    internal static VoidNode Define(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Define);
-
-        var identifier = args[0];
-        var value = args[1];
-
-        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Define, OpCodes.Identifier);
-
-        scope.Set(identifier.Value, Interpreter.Evaluate(value, scope));
-
-        return VoidNode.GetInstance();
-    }
-
-    internal static VoidNode Mutate(int lineNumber, List<AstNode> args, Scope scope)
-    {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Mutate);
-
-        var identifier = args[0];
-        var value = args[1];
-
-        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
-
-        if (!scope.Update(identifier.Value, Interpreter.Evaluate(value, scope)))
-        {
-            throw RuntimeException.UndefinedReference(lineNumber, identifier.Value);
-        }
-
-        return VoidNode.GetInstance();
-    }
-
-    internal static Node Add(int lineNumber, List<AstNode> args, Scope scope) =>
+    internal static Node Add(int lineNumber, List<Node> args, Scope scope) =>
         HelperMethods.ExecuteBasicMathFunction(lineNumber, args, scope, Names.Add);
 
-    internal static Node Subtract(int lineNumber, List<AstNode> args, Scope scope) =>
+    internal static Node Subtract(int lineNumber, List<Node> args, Scope scope) =>
         HelperMethods.ExecuteBasicMathFunction(lineNumber, args, scope, Names.Subtract);
 
-    internal static Node Multiply(int lineNumber, List<AstNode> args, Scope scope) =>
+    internal static Node Multiply(int lineNumber, List<Node> args, Scope scope) =>
         HelperMethods.ExecuteBasicMathFunction(lineNumber, args, scope, Names.Multiply);
 
-    internal static Node Divide(int lineNumber, List<AstNode> args, Scope scope) =>
+    internal static Node Divide(int lineNumber, List<Node> args, Scope scope) =>
         HelperMethods.ExecuteBasicMathFunction(lineNumber, args, scope, Names.Divide);
+
+    internal static Node Map(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Map);
+
+        HelperMethods.ValidateArgType(lineNumber, args[0], Names.Map, NodeTypes.List);
+        var list = (ListNode)args[0];
+
+        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Map, NodeTypes.Function, NodeTypes.NativeFunction);
+        var function = args[1];
+
+        var result = new List<Node>();
+
+        for (var i = 0; i < list.Value.Count; i++)
+        {
+            var mapFuncArgs = new List<Node>
+            {
+                list.Value[i],
+                new IntegerNode(i),
+            };
+
+            result.Add(Interpreter.ExecuteFunction(lineNumber, function, mapFuncArgs, scope));
+        }
+
+        return new ListNode(result);
+    }
 }

@@ -51,16 +51,17 @@ internal static class Names
     public const string Float = "float";
     public const string String = "string";
     public const string List = "list";
-    // TODO: type ??
+    // TODO: type ?? (boolean, ...)
 
     // list and string methods
-    public const string Length = "length";              // alias with len
+    public const string Length = "len";
     public const string Join = "join";
     public const string Get = "get";
     public const string Set = "set";
-    public const string Head = "head";                  // alias with car
-    public const string Tail = "tail";                  // alias with cdr
+    public const string Head = "head";                  // alias with car?
+    public const string Tail = "tail";                  // alias with cdr?
     public const string Insert = "insert";
+    public const string Append = "append";
     public const string Delete = "delete";
     public const string Map = "map";
     public const string Reduce = "reduce";

@@ -1,4 +1,6 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
+using Crumb.Core.Lexing;
+using Crumb.Core.Parsing;
 
 namespace Crumb.Core.Evaluating;
 public class Scope
@@ -50,8 +52,20 @@ public class Scope
             scope.Set(name, new NativeFunctionNode(function));
         }
 
-        // TODO: built in functions (non-native)
+        foreach (var (name, function) in StandardLibrary.BuiltIns.Functions)
+        {
+            scope.Set(name, CreateFunction(function, scope));
+        }
 
         return scope;
+    }
+
+    private static FunctionNode CreateFunction(string input, Scope scope)
+    {
+        var tokens = Lexer.Tokenize(input);
+        var ast = Parser.Parse(tokens);
+        var function = Interpreter.Evaluate(ast, scope);
+
+        return (FunctionNode)function;
     }
 }

@@ -42,6 +42,9 @@ internal class HelperMethods
         }
     }
 
+    internal static void ValidateArgsTypes(int lineNumber, List<AstNode> args, string name, params OpCodes[] types) =>
+        args.ForEach(a => ValidateArgType(lineNumber, a, name, types));
+
     internal static void ValidateArgsTypes(int lineNumber, List<Node> args, string name, params NodeTypes[] types) =>
         args.ForEach(a => ValidateArgType(lineNumber, a, name, types));
 
@@ -98,18 +101,16 @@ internal class HelperMethods
         _ => throw UnreachableCode($"expected integer, got {node.Type}"),
     };
 
-    internal static Node ExecuteBasicMathFunction(int lineNumber, List<AstNode> args, Scope scope, string name)
+    internal static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, Scope scope, string name)
     {
         ValidateMinArgCount(lineNumber, args, 2, name);
 
-        var numbers = Interpreter.EvaluateArguments(args, scope);
+        ValidateNumber(lineNumber, args, name);
 
-        ValidateNumber(lineNumber, numbers, name);
-
-        if (CheckForFloat(numbers))
+        if (CheckForFloat(args))
         {
-            return new FloatNode(numbers.Skip(1).Aggregate(
-                GetFloatValue(numbers[0]),
+            return new FloatNode(args.Skip(1).Aggregate(
+                GetFloatValue(args[0]),
                 (acc, node) => {
                     return name switch
                     {
@@ -124,8 +125,8 @@ internal class HelperMethods
         }
         else
         {
-            return new IntegerNode(numbers.Skip(1).Aggregate(
-                GetIntegerValue(numbers[0]),
+            return new IntegerNode(args.Skip(1).Aggregate(
+                GetIntegerValue(args[0]),
                 (acc, node) => {
                     return name switch
                     {

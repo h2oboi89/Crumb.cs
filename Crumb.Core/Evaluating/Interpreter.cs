@@ -1,4 +1,5 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
+using Crumb.Core.Evaluating.StandardLibrary;
 using Crumb.Core.Parsing;
 
 namespace Crumb.Core.Evaluating;
@@ -20,7 +21,7 @@ public static class Interpreter
         {
             OpCodes.Block => EvaluateBlock(node, scope),
             OpCodes.Apply => EvaluateApply(node, scope),
-            OpCodes.List => throw new NotImplementedException(),
+            OpCodes.List => EvaluateList(node, scope),
             OpCodes.Integer => EvaluateInteger(node),
             OpCodes.Float => EvaluateFloat(node),
             OpCodes.String => EvaluateString(node),
@@ -60,6 +61,20 @@ public static class Interpreter
             throw new RuntimeException(node.LineNumber, "empty apply.");
         }
 
+        // TODO: make it so you can get string from another evaluation and use it?
+        if (node.Children[0].OpCode == OpCodes.Identifier)
+        {
+            switch (node.Children[0].Value)
+            {
+                case Names.Define:
+                    return Define(node.LineNumber, node.Children.Skip(1).ToList(), scope);
+                case Names.Mutate:
+                    return Mutate(node.LineNumber, node.Children.Skip(1).ToList(), scope);
+                case Names.Function:
+                    return Function(node.LineNumber, node.Children.Skip(1).ToList());
+            }
+        }
+
         var function = node.Children[0].OpCode switch
         {
             OpCodes.Apply => EvaluateApply(node.Children[0], scope),
@@ -67,16 +82,84 @@ public static class Interpreter
             _ => throw new RuntimeException(node.LineNumber, $"expected function, got '{node.Children[0].Value}'."),
         };
 
-        var args = node.Children.Skip(1).ToList();
+        var args = node.Children.Skip(1).Select(a => Evaluate(a, scope)).ToList();
 
         return function switch
         {
-            //FunctionNode functionNode => EvaluateFunction(node.LineNumber, functionNode, args, scope),
+            FunctionNode functionNode => EvaluateFunction(node.LineNumber, functionNode, args, scope),
             NativeFunctionNode nativeFunctionNode => EvaluateNativeFunction(node.LineNumber, nativeFunctionNode, args, scope),
             _ => throw new RuntimeException(node.LineNumber, $"expected function name, got {function.Type}."),
         };
+    }
 
-        throw new NotImplementedException();
+    private static VoidNode Define(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Define);
+
+        var identifier = args[0];
+        var value = args[1];
+
+        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Define, OpCodes.Identifier);
+
+        scope.Set(identifier.Value, Evaluate(value, scope));
+
+        return VoidNode.GetInstance();
+    }
+
+    private static VoidNode Mutate(int lineNumber, List<AstNode> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Mutate);
+
+        var identifier = args[0];
+        var value = args[1];
+
+        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
+
+        if (!scope.Update(identifier.Value, Interpreter.Evaluate(value, scope)))
+        {
+            throw RuntimeException.UndefinedReference(lineNumber, identifier.Value);
+        }
+
+        return VoidNode.GetInstance();
+    }
+
+    private static FunctionNode Function(int lineNumber, List<AstNode> args)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 1, 2, Names.Function);
+
+        var functionArguments = new List<AstNode>();
+        var bodyArg = 0;
+
+        if (args.Count == 2)
+        {
+            HelperMethods.ValidateArgType(lineNumber, args[0], Names.Function, OpCodes.List);
+
+            HelperMethods.ValidateArgsTypes(lineNumber, args[0].Children, Names.Function, OpCodes.Identifier);
+
+            functionArguments.AddRange(args[0].Children);
+
+            bodyArg++;
+        }
+
+        HelperMethods.ValidateArgType(lineNumber, args[bodyArg], Names.Function, OpCodes.Block);
+
+        var body = args[bodyArg];
+
+        var function = new DefinedFunction(functionArguments, body);
+
+        return new FunctionNode(function);
+    }
+
+    private static ListNode EvaluateList(AstNode node, Scope scope)
+    {
+        var values = new List<Node>();
+
+        foreach (var child in node.Children)
+        {
+            values.Add(Evaluate(child, scope));
+        }
+
+        return new ListNode(values);
     }
 
     private static IntegerNode EvaluateInteger(AstNode node)
@@ -105,9 +188,6 @@ public static class Interpreter
 
     private static StringNode EvaluateString(AstNode node) => new(node.Value);
 
-    internal static List<Node> EvaluateArguments(IEnumerable<AstNode> nodes, Scope scope) =>
-        nodes.Select(n => Evaluate(n, scope)).ToList();
-
     private static Node EvaluateIdentifier(AstNode node, Scope scope)
     {
         var value = scope.Get(node.Value);
@@ -115,6 +195,39 @@ public static class Interpreter
         return value ?? throw RuntimeException.UndefinedReference(node.LineNumber, node.Value);
     }
 
-    private static Node EvaluateNativeFunction(int lineNumber, NativeFunctionNode node, List<AstNode> args, Scope scope) =>
+    internal static Node ExecuteFunction(int lineNumber, Node node, List<Node> args, Scope scope)
+    {
+        if (node is NativeFunctionNode nativeFunction)
+        {
+            return EvaluateNativeFunction(lineNumber, nativeFunction, args, scope);
+        }
+        if (node is FunctionNode function)
+        {
+            return EvaluateFunction(lineNumber, function, args, scope);
+        }
+
+        throw new RuntimeException(lineNumber, $"Expected function, got {node.Type}");
+    }
+
+    private static Node EvaluateNativeFunction(int lineNumber, NativeFunctionNode node, List<Node> args, Scope scope) =>
         node.Value(lineNumber, args, scope);
+
+    private static Node EvaluateFunction(int lineNumber, FunctionNode node, List<Node> args, Scope scope)
+    {
+        var localScope = new Scope(scope);
+
+        var funcArgs = node.Value.Arguments;
+
+        if (args.Count != funcArgs.Count)
+        {
+            throw new RuntimeException(lineNumber, $"invalid number of arguments: require {node.Value.Arguments.Count}, got {args.Count}.");
+        }
+
+        for (var i = 0; i < node.Value.Arguments.Count; i++)
+        {
+            localScope.Set(funcArgs[i].Value, args[i]);
+        }
+
+        return EvaluateBlock(node.Value.Body, localScope);
+    }
 }

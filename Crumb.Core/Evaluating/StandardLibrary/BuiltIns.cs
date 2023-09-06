@@ -1,5 +1,4 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
-using Crumb.Core.Parsing;
 using Crumb.Core.Utility;
 using System.Collections.ObjectModel;
 
@@ -8,11 +7,10 @@ public static class BuiltIns
 {
     public static IConsole Console { internal get; set; } = new SystemConsole();
 
-    internal static readonly ReadOnlyDictionary<string, Func<int, List<AstNode>, Scope, Node>> NativeFunctions = new Dictionary<string, Func<int, List<AstNode>, Scope, Node>>
+    internal static readonly ReadOnlyDictionary<string, Func<int, List<Node>, Scope, Node>> NativeFunctions = new Dictionary<string, Func<int, List<Node>, Scope, Node>>
     {
         // IO
         { Names.Print, StandardLibrary.NativeFunctions.Print },
-        //public const string PrintLine = "printLine";
         //public const string Input = "input";
         { Names.InputLine, StandardLibrary.NativeFunctions.InputLine },
         //public const string Rows = "rows";
@@ -21,11 +19,6 @@ public static class BuiltIns
         //public const string WriteFile = "write";
         //// TODO: event ??
         //public const string Use = "use";
-
-        // scope state
-        { Names.Define, StandardLibrary.NativeFunctions.Define },
-        { Names.Mutate, StandardLibrary.NativeFunctions.Mutate },
-        //public const string Function = "fun";
 
         // comparisons
         //public const string Is = "is";
@@ -71,9 +64,14 @@ public static class BuiltIns
         //public const string Tail = "tail";
         //public const string Insert = "insert";
         //public const string Delete = "delete";
-        //public const string Map = "map";
+        { Names.Map, StandardLibrary.NativeFunctions.Map },
         //public const string Reduce = "reduce";
         //public const string Range = "range";
         //public const string Find = "find";
-}.AsReadOnly();
+    }.AsReadOnly();
+
+    internal static readonly ReadOnlyDictionary<string, string> Functions = new Dictionary<string, string>
+    {
+        { Names.PrintLine, StandardLibrary.Functions.PrintLine },
+    }.AsReadOnly();
 }
