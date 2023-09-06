@@ -6,6 +6,42 @@ namespace UnitTests.Crumb.Core.Evaluating;
 internal class InterpreterListAndStringTests
 {
     [Test]
+    public static void Length_List_ReturnsLength()
+    {
+        var input = """
+            {
+                ( def l [ 1 2 3 4 ] )
+                ( print ( len l ) )
+                ( mut l [ ] )
+                ( print ( len l ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("4");
+            testConsole.Write("0");
+        });
+    }
+
+    [Test]
+    public static void Length_String_ReturnsLength()
+    {
+        var input = """
+            {
+                ( def s "foo the bar" )
+                ( print ( len s ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("11");
+    }
+
+    [Test]
     public static void Map_IteratesList()
     {
         var input = """

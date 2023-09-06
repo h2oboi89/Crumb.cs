@@ -52,11 +52,10 @@ public static class BuiltIns
         //public const string Integer = "integer";
         //public const string Float = "float";
         //public const string String = "string";
-        //public const string List = "list";
         //// TODO: type ??
 
         // list and string methods
-        //public const string Length = "length";
+        { Names.Length, StandardLibrary.NativeFunctions.Length },
         //public const string Join = "join";
         //public const string Get = "get";
         //public const string Set = "set";
