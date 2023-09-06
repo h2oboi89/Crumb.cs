@@ -18,6 +18,7 @@ internal class ListNode : Node
         return hashCode.ToHashCode();
     }
 
+    // TODO: remove commas to match user style
     public override string ToString() =>
         $"[ {string.Join(", ", Value.Select(n => n.ToString()))} ]";
 }
