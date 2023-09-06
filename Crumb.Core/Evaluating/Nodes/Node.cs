@@ -2,9 +2,9 @@
 public abstract class Node : IEquatable<Node>
 {
     public readonly NodeTypes Type;
-    public readonly object? Value;
+    public readonly object Value;
 
-    public Node(NodeTypes type, object? value)
+    public Node(NodeTypes type, object value)
     {
         Type = type;
         Value = value;
@@ -26,7 +26,7 @@ public abstract class Node : IEquatable<Node>
             ValueEquals(other.Value);
     }
 
-    protected abstract bool ValueEquals(object? otherValue);
+    protected abstract bool ValueEquals(object otherValue);
 
     public override bool Equals(object? obj) => obj is Node other && Equals(other);
 

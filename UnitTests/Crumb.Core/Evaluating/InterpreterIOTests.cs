@@ -111,5 +111,27 @@ internal static class InterpreterIOTests
             testConsole.Write($"{Environment.NewLine}");
         });
     }
+
+    [Test]
+    public static void Printing_Types()
+    {
+        var values = new (string input, string expected)[]
+        {
+            ( "{ ( print void ) }" , "void"),
+            ( "{ ( print 1 ) }", "1"),
+            ( "{ ( print 3.14159 ) }", "3.14159"),
+            ( "{ ( print \"foo\" ) }", "foo"),
+            ( "{ ( print ( fun { } ) ) }", "<Function>"),
+            ( "{ ( print print ) }", "<NativeFunction>"),
+            ( "{ ( print [ void 1 2.5 \"bar\" map ] ) }", "[ void, 1, 2.5, bar, <NativeFunction> ]"),
+        };
+
+        foreach (var (input, expected) in values)
+        {
+            var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+            testConsole.Received().Write(expected);
+        }
+    }
     #endregion
 }
