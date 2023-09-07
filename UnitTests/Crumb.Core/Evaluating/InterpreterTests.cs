@@ -20,6 +20,15 @@ internal static class InterpreterTests
             (
                 "{ ( 1 ) }",
                 HelperMethods.RuntimeErrorOnLine1("expected function, got '1'.")
+            ),
+            (
+                """
+                {
+                    ( def foo 1 )
+                    ( foo )
+                }
+                """,
+                HelperMethods.RuntimeErrorOnLineN("expected function name, got Integer.", 3)
             )
         );
     }

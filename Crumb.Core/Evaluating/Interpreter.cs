@@ -99,7 +99,7 @@ public static class Interpreter
         var identifier = args[0];
         var value = args[1];
 
-        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Define, OpCodes.Identifier);
+        ValidateArgType(lineNumber, identifier, Names.Define, OpCodes.Identifier);
 
         scope.Set(identifier.Value, Evaluate(value, scope));
 
@@ -113,7 +113,7 @@ public static class Interpreter
         var identifier = args[0];
         var value = args[1];
 
-        HelperMethods.ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
+        ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
 
         if (!scope.Update(identifier.Value, Evaluate(value, scope)))
         {
@@ -132,16 +132,16 @@ public static class Interpreter
 
         if (args.Count == 2)
         {
-            HelperMethods.ValidateArgType(lineNumber, args[0], Names.Function, OpCodes.List);
+            ValidateArgType(lineNumber, args[0], Names.Function, OpCodes.List);
 
-            HelperMethods.ValidateArgsTypes(lineNumber, args[0].Children, Names.Function, OpCodes.Identifier);
+            ValidateArgsTypes(lineNumber, args[0].Children, Names.Function, OpCodes.Identifier);
 
             functionArguments.AddRange(args[0].Children);
 
             bodyArg++;
         }
 
-        HelperMethods.ValidateArgType(lineNumber, args[bodyArg], Names.Function, OpCodes.Block);
+        ValidateArgType(lineNumber, args[bodyArg], Names.Function, OpCodes.Block);
 
         var body = args[bodyArg];
 
@@ -233,4 +233,23 @@ public static class Interpreter
 
         return EvaluateBlock(node.Value.Body, localScope);
     }
+
+    private static void ValidateArgType(int lineNumber, AstNode arg, string name, params OpCodes[] expected)
+    {
+        if (!expected.Contains(arg.OpCode))
+        {
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode}, expected one of [ {string.Join(", ", expected)} ].");
+        }
+    }
+
+    private static void ValidateArgType(int lineNumber, AstNode arg, string name, OpCodes expected)
+    {
+        if (arg.OpCode != expected)
+        {
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode}, expected {expected}.");
+        }
+    }
+
+    private static void ValidateArgsTypes(int lineNumber, List<AstNode> args, string name, params OpCodes[] types) =>
+        args.ForEach(a => ValidateArgType(lineNumber, a, name, types));
 }

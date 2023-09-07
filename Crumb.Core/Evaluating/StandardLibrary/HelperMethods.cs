@@ -1,5 +1,4 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
-using Crumb.Core.Parsing;
 
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal class HelperMethods
@@ -25,25 +24,6 @@ internal class HelperMethods
             throw new RuntimeException(lineNumber, $"{name} requires at most {max} arguments, got {args.Count}.");
         }
     }
-
-    internal static void ValidateArgType(int lineNumber, AstNode arg, string name, params OpCodes[] expected)
-    {
-        if (!expected.Contains(arg.OpCode))
-        {
-            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode} '{arg.Value}', expected one of [ {string.Join(", ", expected)} ].");
-        }
-    }
-
-    internal static void ValidateArgType(int lineNumber, AstNode arg, string name, OpCodes expected)
-    {
-        if (arg.OpCode != expected)
-        {
-            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode} '{arg.Value}', expected {expected}.");
-        }
-    }
-
-    internal static void ValidateArgsTypes(int lineNumber, List<AstNode> args, string name, params OpCodes[] types) =>
-        args.ForEach(a => ValidateArgType(lineNumber, a, name, types));
 
     internal static void ValidateArgsTypes(int lineNumber, List<Node> args, string name, params NodeTypes[] types) =>
         args.ForEach(a => ValidateArgType(lineNumber, a, name, types));

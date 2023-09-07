@@ -50,7 +50,7 @@ internal static class InterpreterStateTests
         HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( def 1 2 ) }",
-                HelperMethods.RuntimeErrorOnLine1("def unexpected Integer '1', expected Identifier.")
+                HelperMethods.RuntimeErrorOnLine1("def unexpected Integer, expected Identifier.")
             )
         );
     }
@@ -99,6 +99,69 @@ internal static class InterpreterStateTests
             (
                 "{ ( def foo 1 2 ) }",
                 HelperMethods.RuntimeErrorOnLine1("def requires at most 2 arguments, got 3.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Function_DefinedAndExecuted()
+    {
+        var input = """
+            {
+                ( def foo
+                    ( fun []
+                        {
+                            ( print ( * ( + 1 2 ) 3 ) )
+                        }
+                    )
+                )
+                ( foo )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("9");
+    }
+
+    [Test]
+    public static void Function_InlineExecuted()
+    {
+        var input = """
+            {
+                (
+                    ( fun []
+                        {
+                            ( print ( * ( + 1 2 ) 3 ) )
+                        }
+                    )
+                )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write("9");
+    }
+
+    [Test]
+    public static void Function_InvalidArgType_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                "{ ( fun [ 1 ] { } ) }",
+                HelperMethods.RuntimeErrorOnLine1("fun unexpected Integer, expected one of [ Identifier ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Function_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                "{ ( ( fun [ ] { } ) 1 ) }",
+                HelperMethods.RuntimeErrorOnLine1("invalid number of arguments: require 0, got 1.")
             )
         );
     }
