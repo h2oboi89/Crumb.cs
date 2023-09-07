@@ -9,6 +9,9 @@ public static class BuiltIns
 
     internal static readonly ReadOnlyDictionary<string, Func<int, List<Node>, Scope, Node>> NativeFunctions = new Dictionary<string, Func<int, List<Node>, Scope, Node>>
     {
+        // meta
+        // help: prints function info? (args, types expected, etc?)
+
         // IO
         { Names.Print, StandardLibrary.NativeFunctions.Print },
         //public const string Input = "input";
