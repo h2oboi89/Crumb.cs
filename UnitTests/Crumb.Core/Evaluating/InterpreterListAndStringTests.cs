@@ -109,6 +109,15 @@ internal class InterpreterListAndStringTests
     }
 
     [Test]
+    public static void Join_InvalidArgCount_Throws()
+    {
+        var input = "{ ( join ) }";
+        var expected = HelperMethods.RuntimeErrorOnLine1("join requires at least 2 arguments, got 0.");
+
+        HelperMethods.ExecuteForRuntimeError((input, expected));
+    }
+
+    [Test]
     public static void Map_IteratesList()
     {
         var input = """
@@ -126,6 +135,48 @@ internal class InterpreterListAndStringTests
             testConsole.Write("3");
             testConsole.Write("4");
         });
+    }
+
+    [Test]
+    public static void Map_InvalidArgTypes_Throws()
+    {
+        var values = new (string input, string expected)[]
+        {
+            (
+                "{ ( map 1 ( fun [ ] { } ) ) } ",
+                HelperMethods.RuntimeErrorOnLine1("map: unexpected Integer, expected List.")
+            ),
+            (
+                "{ ( map [ ] 1 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("map: unexpected Integer, expected one of [ Function, NativeFunction ].")
+            )
+        };
+
+        foreach (var value in values)
+        {
+            HelperMethods.ExecuteForRuntimeError(value);
+        }
+    }
+
+    [Test]
+    public static void Map_InvalidArgCount_Throws()
+    {
+        var values = new (string input, string expected)[]
+        {
+            (
+                "{ ( map 1 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("map requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( map 1 2 3 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("map requires at most 2 arguments, got 3.")
+            )
+        };
+
+        foreach (var value in values)
+        {
+            HelperMethods.ExecuteForRuntimeError(value);
+        }
     }
 
     [Test]
@@ -147,5 +198,47 @@ internal class InterpreterListAndStringTests
         var testConsole = HelperMethods.CaptureOutputAndExecute(input);
 
         testConsole.Received().Write("10");
+    }
+
+    [Test]
+    public static void Reduce_InvalidArgTypes_Throws()
+    {
+        var values = new (string input, string expected)[]
+        {
+            (
+                "{ ( reduce 1 ( fun [ ] { } ) 0 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("reduce: unexpected Integer, expected List.")
+            ),
+            (
+                "{ ( reduce [ ] 1 0 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("reduce: unexpected Integer, expected one of [ Function, NativeFunction ].")
+            )
+        };
+
+        foreach (var value in values)
+        {
+            HelperMethods.ExecuteForRuntimeError(value);
+        }
+    }
+
+    [Test]
+    public static void Reduce_InvalidArgCount_Throws()
+    {
+        var values = new (string input, string expected)[]
+        {
+            (
+                "{ ( reduce 1 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("reduce requires at least 2 arguments, got 1.")
+            ),
+            (
+                "{ ( reduce 1 2 3 4 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("reduce requires at most 3 arguments, got 4.")
+            )
+        };
+
+        foreach (var value in values)
+        {
+            HelperMethods.ExecuteForRuntimeError(value);
+        }
     }
 }

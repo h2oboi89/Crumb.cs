@@ -67,6 +67,7 @@ public static class BuiltIns
         { Names.Reduce, StandardLibrary.NativeFunctions.Reduce },
         //public const string Range = "range";
         //public const string Find = "find";
+        //public const string Flatten = "flatten";
     }.AsReadOnly();
 
     internal static readonly ReadOnlyDictionary<string, string> Functions = new Dictionary<string, string>

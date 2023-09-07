@@ -14,9 +14,9 @@ internal static class Names
     public const string Use = "use";
 
     // scope state
-    public const string Define = "def";         // define variable
-    public const string Mutate = "mut";         // update variable
-    public const string Function = "fun";       // define function
+    public const string Define = "def";
+    public const string Mutate = "mut";
+    public const string Function = "fun";
 
     // comparisons
     public const string Is = "is";
@@ -67,4 +67,5 @@ internal static class Names
     public const string Reduce = "reduce";
     public const string Range = "range";
     public const string Find = "find";
+    public const string Flatten = "flatten";
 }

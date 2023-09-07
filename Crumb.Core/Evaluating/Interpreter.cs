@@ -115,7 +115,7 @@ public static class Interpreter
 
         HelperMethods.ValidateArgType(lineNumber, identifier, Names.Mutate, OpCodes.Identifier);
 
-        if (!scope.Update(identifier.Value, Interpreter.Evaluate(value, scope)))
+        if (!scope.Update(identifier.Value, Evaluate(value, scope)))
         {
             throw RuntimeException.UndefinedReference(lineNumber, identifier.Value);
         }
