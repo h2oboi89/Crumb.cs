@@ -45,7 +45,7 @@ internal class InterpreterListAndStringTests
     public static void Length_InvalidType_Throws()
     {
         var input = "{ ( len 1 ) }";
-        var expected = HelperMethods.RuntimeErrorOnLine1("len: unexpected Integer, expected one of [ List, String ].");
+        var expected = HelperMethods.RuntimeErrorOnLine1("len unexpected Integer, expected one of [ List, String ].");
 
         HelperMethods.ExecuteForRuntimeError((input, expected));
     }
@@ -103,7 +103,7 @@ internal class InterpreterListAndStringTests
     public static void Join_InvalidTypes_Throws()
     {
         var input = """{ ( join [ ] "foo" ) }""";
-        var expected = HelperMethods.RuntimeErrorOnLine1("join: expected all lists or all strings.");
+        var expected = HelperMethods.RuntimeErrorOnLine1("join expected all lists or all strings.");
 
         HelperMethods.ExecuteForRuntimeError((input, expected));
     }
@@ -144,11 +144,11 @@ internal class InterpreterListAndStringTests
         {
             (
                 "{ ( map 1 ( fun [ ] { } ) ) } ",
-                HelperMethods.RuntimeErrorOnLine1("map: unexpected Integer, expected List.")
+                HelperMethods.RuntimeErrorOnLine1("map unexpected Integer, expected List.")
             ),
             (
                 "{ ( map [ ] 1 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("map: unexpected Integer, expected one of [ Function, NativeFunction ].")
+                HelperMethods.RuntimeErrorOnLine1("map unexpected Integer, expected one of [ Function, NativeFunction ].")
             )
         };
 
@@ -207,11 +207,11 @@ internal class InterpreterListAndStringTests
         {
             (
                 "{ ( reduce 1 ( fun [ ] { } ) 0 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("reduce: unexpected Integer, expected List.")
+                HelperMethods.RuntimeErrorOnLine1("reduce unexpected Integer, expected List.")
             ),
             (
                 "{ ( reduce [ ] 1 0 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("reduce: unexpected Integer, expected one of [ Function, NativeFunction ].")
+                HelperMethods.RuntimeErrorOnLine1("reduce unexpected Integer, expected one of [ Function, NativeFunction ].")
             )
         };
 

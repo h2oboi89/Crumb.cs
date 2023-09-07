@@ -17,8 +17,6 @@ public static class BuiltIns
         //public const string Columns = "columns";
         //public const string ReadFile = "read";
         //public const string WriteFile = "write";
-        //// TODO: event ??
-        //public const string Use = "use";
 
         // comparisons
         //public const string Is = "is";
@@ -36,7 +34,7 @@ public static class BuiltIns
         { Names.Subtract, StandardLibrary.NativeFunctions.Subtract },
         { Names.Multiply, StandardLibrary.NativeFunctions.Multiply },
         { Names.Divide, StandardLibrary.NativeFunctions.Divide },
-        //public const string Remainder = "%";
+        { Names.Remainder, StandardLibrary.NativeFunctions.Remainder },
         //public const string Power = "^";
         //public const string Random = "random";
 

@@ -10,8 +10,6 @@ internal static class Names
     public const string Columns = "columns";
     public const string ReadFile = "read";
     public const string WriteFile = "write";
-    // TODO: event ??
-    public const string Use = "use";
 
     // scope state
     public const string Define = "def";

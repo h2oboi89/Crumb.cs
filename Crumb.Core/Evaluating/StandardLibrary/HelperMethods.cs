@@ -30,7 +30,7 @@ internal class HelperMethods
     {
         if (!expected.Contains(arg.OpCode))
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.OpCode} '{arg.Value}', expected one of [ {string.Join(", ", expected)} ].");
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode} '{arg.Value}', expected one of [ {string.Join(", ", expected)} ].");
         }
     }
 
@@ -38,7 +38,7 @@ internal class HelperMethods
     {
         if (arg.OpCode != expected)
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.OpCode} '{arg.Value}', expected {expected}.");
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.OpCode} '{arg.Value}', expected {expected}.");
         }
     }
 
@@ -52,7 +52,7 @@ internal class HelperMethods
     {
         if (!expected.Contains(arg.Type))
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.Type}, expected one of [ {string.Join(", ", expected)} ].");
         }
     }
 
@@ -63,7 +63,7 @@ internal class HelperMethods
     {
         if (arg.Type != expected)
         {
-            throw new RuntimeException(lineNumber, $"{name}: unexpected {arg.Type}, expected {expected}.");
+            throw new RuntimeException(lineNumber, $"{name} unexpected {arg.Type}, expected {expected}.");
         }
     }
 
@@ -104,7 +104,7 @@ internal class HelperMethods
         _ => throw UnreachableCode($"expected integer, got {node.Type}"),
     };
 
-    internal static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, Scope scope, string name)
+    internal static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, string name)
     {
         ValidateMinArgCount(lineNumber, args, 2, name);
 

@@ -139,6 +139,29 @@ internal class InterpreterArithmeticTests
     }
 
     [Test]
+    public static void BasicMath_InvalidArgs_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( + "foo" "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("+ unexpected String, expected one of [ Integer, Float ].")
+            ),
+            (
+                """{ ( - "foo" "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("- unexpected String, expected one of [ Integer, Float ].")
+            ),
+            (
+                """{ ( * "foo" "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("* unexpected String, expected one of [ Integer, Float ].")
+            ),
+            (
+                """{ ( / "foo" "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("/ unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
     public static void BasicMath_SupportsMultipleArgs()
     {
         var input = """
@@ -160,6 +183,29 @@ internal class InterpreterArithmeticTests
             testConsole.Write("1");
             testConsole.Write("24");
             testConsole.Write("2");
+        });
+    }
+
+    [Test]
+    public static void Remainder_ValidArgs()
+    {
+        var input = """
+            {
+                ( print ( % 5 3 ) )
+                ( print ( % 5.2 3.0 ) )
+                ( print ( % 6.2 3 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("2");
+            testConsole.Write("2.2");
+            testConsole.Write("0.20000000000000018");
         });
     }
     #endregion

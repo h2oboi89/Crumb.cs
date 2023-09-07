@@ -49,7 +49,7 @@ internal partial class NativeFunctions
             return new StringNode(sb.ToString());
         }
 
-        throw new RuntimeException(lineNumber, $"{Names.Join}: expected all lists or all strings.");
+        throw new RuntimeException(lineNumber, $"{Names.Join} expected all lists or all strings.");
     }
 
     internal static ListNode Map(int lineNumber, List<Node> args, Scope scope)
