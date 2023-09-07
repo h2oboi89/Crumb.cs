@@ -51,6 +51,27 @@ internal class InterpreterListAndStringTests
     }
 
     [Test]
+    public static void Length_InvalidArgCount_Throws()
+    {
+        var values = new (string input, string expected)[]
+        {
+            (
+                "{ ( len ) } ",
+                HelperMethods.RuntimeErrorOnLine1("len requires at least 1 arguments, got 0.")
+            ),
+            (
+                "{ ( len 1 2 ) } ",
+                HelperMethods.RuntimeErrorOnLine1("len requires at most 1 arguments, got 2.")
+            )
+        };
+
+        foreach (var value in values)
+        {
+            HelperMethods.ExecuteForRuntimeError(value);
+        }
+    }
+
+    [Test]
     public static void Join_Lists_MergesLists()
     {
         var input = """
