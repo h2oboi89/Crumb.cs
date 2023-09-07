@@ -20,13 +20,9 @@ internal class InterpreterArithmeticTests
         var input = """
             {
                 ( print ( + 1 2 ) )
-                ( print " " )
                 ( print ( - 9 5 ) )
-                ( print " " )
                 ( print ( * 7 6 ) )
-                ( print " " )
                 ( print ( / 6 2 ) )
-                ( print " " )
                 ( print ( / 5 3 ) )
             }
             """;
@@ -38,13 +34,9 @@ internal class InterpreterArithmeticTests
         Received.InOrder(() =>
         {
             testConsole.Write("3");
-            testConsole.Write(" ");
             testConsole.Write("4");
-            testConsole.Write(" ");
             testConsole.Write("42");
-            testConsole.Write(" ");
             testConsole.Write("3");
-            testConsole.Write(" ");
             testConsole.Write("1");
         });
     }
@@ -55,11 +47,8 @@ internal class InterpreterArithmeticTests
         var input = """
             {
                 ( print ( + 2.3 3.1 ) )
-                ( print " " )
                 ( print ( - 3.14 0.25 ) )
-                ( print " " )
                 ( print ( * 3.3 2.0 ) )
-                ( print " " )
                 ( print ( / 5.0 3.0 ) )
             }
             """;
@@ -71,11 +60,8 @@ internal class InterpreterArithmeticTests
         Received.InOrder(() =>
         {
             testConsole.Write("5.4");
-            testConsole.Write(" ");
             testConsole.Write("2.89");
-            testConsole.Write(" ");
             testConsole.Write("6.6");
-            testConsole.Write(" ");
             testConsole.Write("1.6666666666666667");
         });
     }
@@ -86,7 +72,6 @@ internal class InterpreterArithmeticTests
         var input = """
             {
                 ( print ( / 5 3 ) )
-                ( print " " )
                 ( print ( / 5 3.0 ) )
             }
             """;
@@ -98,7 +83,6 @@ internal class InterpreterArithmeticTests
         Received.InOrder(() =>
         {
             testConsole.Write("1");
-            testConsole.Write(" ");
             testConsole.Write("1.6666666666666667");
         });
     }
@@ -152,6 +136,31 @@ internal class InterpreterArithmeticTests
                 HelperMethods.RuntimeErrorOnLine1("/ requires at least 2 arguments, got 1.")
             )
         );
+    }
+
+    [Test]
+    public static void BasicMath_SupportsMultipleArgs()
+    {
+        var input = """
+            {
+                ( print ( + 1 2 3 4 ) )
+                ( print ( - 10 4 3 2 ) )
+                ( print ( * 1 2 3 4 ) )
+                ( print ( / 24 4 3 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("10");
+            testConsole.Write("1");
+            testConsole.Write("24");
+            testConsole.Write("2");
+        });
     }
     #endregion
 }

@@ -31,6 +31,16 @@ internal static class InterpreterIOTests
     }
 
     [Test]
+    public static void Print_NoArgs_PrintsNothing()
+    {
+        var input = "{ ( print ) }";
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        testConsole.Received().Write(string.Empty);
+    }
+
+    [Test]
     public static void PrintWithEscapeSequences()
     {
         var values = new (string input, string expected)[]
@@ -90,6 +100,16 @@ internal static class InterpreterIOTests
 
         testConsole.Received().ReadLine();
         testConsole.Received().Write(expected);
+    }
+
+    [Test]
+    public static void InputLine_InvalidArgCount_Throws()
+    {
+        var input = "{ ( inputLine 1 ) }";
+
+        var expected = HelperMethods.RuntimeErrorOnLine1("inputLine requires at most 0 arguments, got 1.");
+
+        HelperMethods.ExecuteForRuntimeError((input, expected));
     }
 
     [Test]
