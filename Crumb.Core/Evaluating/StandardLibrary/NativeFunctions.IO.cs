@@ -7,7 +7,6 @@ internal partial class NativeFunctions
 {
 #pragma warning disable IDE0060 // Remove unused parameter
     internal static VoidNode Print(int lineNumber, List<Node> args, Scope scope)
-#pragma warning restore IDE0060 // Remove unused parameter
     {
         var line = string.Join(string.Empty, args.Select(a => a.ToString()));
 
@@ -40,9 +39,7 @@ internal partial class NativeFunctions
         return VoidNode.GetInstance();
     }
 
-#pragma warning disable IDE0060 // Remove unused parameter
     internal static StringNode InputLine(int lineNumber, List<Node> args, Scope scope)
-#pragma warning restore IDE0060 // Remove unused parameter
     {
         HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.InputLine);
 
@@ -50,4 +47,28 @@ internal partial class NativeFunctions
 
         return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input.") : new StringNode(line);
     }
+
+    internal static IntegerNode Rows(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Rows);
+
+        return new IntegerNode(BuiltIns.Console.WindowHeight);
+    }
+
+    internal static IntegerNode Columns(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Columns);
+
+        return new IntegerNode(BuiltIns.Console.WindowWidth);
+    }
+
+    internal static VoidNode Clear(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Clear);
+
+        BuiltIns.Console.Clear();
+
+        return VoidNode.GetInstance();
+    }
+#pragma warning restore IDE0060 // Remove unused parameter
 }

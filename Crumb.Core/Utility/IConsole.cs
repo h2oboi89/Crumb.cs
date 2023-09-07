@@ -5,4 +5,7 @@ public interface IConsole
     void WriteLine(string value);
     int Read();
     string? ReadLine();
+    int WindowWidth { get; }
+    int WindowHeight { get; }
+    void Clear();
 }

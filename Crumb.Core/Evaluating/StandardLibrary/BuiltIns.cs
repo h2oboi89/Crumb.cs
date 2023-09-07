@@ -13,8 +13,9 @@ public static class BuiltIns
         { Names.Print, StandardLibrary.NativeFunctions.Print },
         //public const string Input = "input";
         { Names.InputLine, StandardLibrary.NativeFunctions.InputLine },
-        //public const string Rows = "rows";
-        //public const string Columns = "columns";
+        { Names.Rows, StandardLibrary.NativeFunctions.Rows },
+        { Names.Columns, StandardLibrary.NativeFunctions.Columns },
+        { Names.Clear, StandardLibrary.NativeFunctions.Clear },
         //public const string ReadFile = "read";
         //public const string WriteFile = "write";
 

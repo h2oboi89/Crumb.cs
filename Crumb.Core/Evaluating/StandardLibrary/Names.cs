@@ -8,6 +8,7 @@ internal static class Names
     public const string InputLine = "inputLine";
     public const string Rows = "rows";
     public const string Columns = "columns";
+    public const string Clear = "clear";
     public const string ReadFile = "read";
     public const string WriteFile = "write";
 

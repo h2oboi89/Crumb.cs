@@ -153,5 +153,33 @@ internal static class InterpreterIOTests
             testConsole.Received().Write(expected);
         }
     }
+
+    [Test]
+    public static void RowsColumnsClear()
+    {
+        var input = """
+            {
+                ( print ( rows ) )
+                ( print ( columns ) )
+                ( clear )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        testConsole.WindowHeight.Returns(10);
+        testConsole.WindowWidth.Returns(20);
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            var r = testConsole.WindowHeight;
+            testConsole.Write("10");
+            var c = testConsole.WindowWidth;
+            testConsole.Write("20");
+            testConsole.Clear();
+        });
+    }
     #endregion
 }
