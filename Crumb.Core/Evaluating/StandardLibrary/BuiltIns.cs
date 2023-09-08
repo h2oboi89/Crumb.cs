@@ -61,8 +61,6 @@ public static class BuiltIns
         { Names.Join, StandardLibrary.NativeFunctions.Join },
         //public const string Get = "get";
         //public const string Set = "set";
-        //public const string Head = "head";
-        //public const string Tail = "tail";
         //public const string Insert = "insert";
         //public const string Delete = "delete";
         { Names.Map, StandardLibrary.NativeFunctions.Map },

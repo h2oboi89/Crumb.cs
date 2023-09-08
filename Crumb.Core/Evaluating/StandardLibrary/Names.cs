@@ -61,8 +61,6 @@ internal static class Names
     public const string Join = "join";
     public const string Get = "get";
     public const string Set = "set";
-    public const string Head = "head";                  // alias with car?
-    public const string Tail = "tail";                  // alias with cdr?
     public const string Insert = "insert";
     public const string Append = "append";
     public const string Delete = "delete";
