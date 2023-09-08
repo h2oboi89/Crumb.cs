@@ -8,4 +8,5 @@ public enum NodeTypes
     Function,
     NativeFunction,
     List,
+    Boolean,
 }

@@ -1,4 +1,5 @@
 ﻿using Crumb.Core.Evaluating.Nodes;
+using Crumb.Core.Evaluating.StandardLibrary;
 using Crumb.Core.Lexing;
 using Crumb.Core.Parsing;
 
@@ -45,7 +46,9 @@ public class Scope
         // TODO: pass along command line args
 
         // constants
-        scope.Set("void", VoidNode.GetInstance());
+        scope.Set(Names.Void, VoidNode.GetInstance());
+        scope.Set(Names.True, BooleanNode.GetTrueInstance());
+        scope.Set(Names.False, BooleanNode.GetFalseInstance());
 
         foreach (var (name, function) in StandardLibrary.BuiltIns.NativeFunctions)
         {

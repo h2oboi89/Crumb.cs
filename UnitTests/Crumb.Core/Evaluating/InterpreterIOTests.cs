@@ -138,12 +138,14 @@ internal static class InterpreterIOTests
         var values = new (string input, string expected)[]
         {
             ( "{ ( print void ) }" , "void"),
+            ( "{ ( print true ) }" , "true"),
+            ( "{ ( print false ) }" , "false"),
             ( "{ ( print 1 ) }", "1"),
             ( "{ ( print 3.14159 ) }", "3.14159"),
             ( "{ ( print \"foo\" ) }", "foo"),
             ( "{ ( print ( fun { } ) ) }", "<Function>"),
             ( "{ ( print print ) }", "<NativeFunction>"),
-            ( "{ ( print [ void 1 2.5 \"bar\" map ] ) }", "[ void, 1, 2.5, bar, <NativeFunction> ]"),
+            ( "{ ( print [ void true false 1 2.5 \"bar\" map ] ) }", "[ void, true, false, 1, 2.5, bar, <NativeFunction> ]"),
         };
 
         foreach (var (input, expected) in values)

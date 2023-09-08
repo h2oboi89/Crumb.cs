@@ -1,6 +1,11 @@
 ﻿namespace Crumb.Core.Evaluating.StandardLibrary;
 internal static class Names
 {
+    // constants
+    public const string Void = "void";
+    public const string True = "true";
+    public const string False = "false";
+
     // IO
     public const string Print = "print";
     public const string PrintLine = "printLine";
@@ -50,11 +55,12 @@ internal static class Names
     public const string Wait = "wait";
 
     // types
-    public const string Integer = "integer";
-    public const string Float = "float";
-    public const string String = "string";
-    public const string List = "list";
-    // TODO: type ?? (boolean, ...)
+    public const string IntegerType = "integer";
+    public const string FloatType = "float";
+    public const string StringType = "string";
+    public const string BooleanType = "boolean";
+    public const string ListType = "list";
+    public const string FunctionType = "function";
 
     // list and string methods
     public const string Length = "len";
