@@ -16,6 +16,10 @@ internal static class Names
     public const string Define = "def";
     public const string Mutate = "mut";
     public const string Function = "fun";
+    public const string Import = "import";
+    // NOTE: These are defined in the Interpreter directly
+    // as they need access to internals and operate differently
+    // than other functions
 
     // comparisons
     public const string Is = "is";

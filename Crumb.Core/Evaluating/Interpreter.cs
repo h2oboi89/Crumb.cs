@@ -48,6 +48,8 @@ public static class Interpreter
                 result = Evaluate(child, localScope);
             }
 
+            depth--;
+
             return result;
         }
 
