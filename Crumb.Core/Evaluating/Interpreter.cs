@@ -6,7 +6,8 @@ namespace Crumb.Core.Evaluating;
 public static class Interpreter
 {
     private static int depth = 0;
-    private const int RECURSION_LIMIT = 20_000;
+    // TODO: improve performance to increase recursion limit
+    private const int RECURSION_LIMIT = 500; 
 
     public static Node Evaluate(string[] args, AstNode node)
     {

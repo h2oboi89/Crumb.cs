@@ -32,5 +32,21 @@ internal static class InterpreterTests
             )
         );
     }
+
+    [Test]
+    public static void RecursionDepthTest()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+            """
+            {
+                ( def f ( fun { ( f ) } ) )
+                ( f )
+            }
+            """,
+            HelperMethods.RuntimeErrorOnLineN("exceeded recursion limit.", 2)
+            )
+        );
+    }
     #endregion
 }
