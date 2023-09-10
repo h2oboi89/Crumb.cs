@@ -8,7 +8,7 @@ internal partial class NativeFunctions
     internal static IntegerNode Length(int lineNumber, List<Node> args, Scope scope)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 1, 1, Names.Length);
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Length);
         HelperMethods.ValidateArgType(lineNumber, args[0], Names.Length, NodeTypes.List, NodeTypes.String);
 
         return args[0].Type switch
@@ -54,7 +54,7 @@ internal partial class NativeFunctions
 
     internal static ListNode Map(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Map);
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Map);
 
         HelperMethods.ValidateArgType(lineNumber, args[0], Names.Map, NodeTypes.List);
         var list = (ListNode)args[0];
@@ -80,7 +80,7 @@ internal partial class NativeFunctions
 
     internal static Node Reduce(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 3, Names.Reduce);
+        HelperMethods.ValidateRangeArgCount(lineNumber, args, 2, 3, Names.Reduce);
 
         HelperMethods.ValidateArgType(lineNumber, args[0], Names.Reduce, NodeTypes.List);
         var list = (ListNode)args[0];

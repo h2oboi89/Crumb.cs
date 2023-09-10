@@ -94,11 +94,11 @@ internal static class InterpreterStateTests
         HelperMethods.ExecuteForRuntimeError(
             (
                 "{ ( def foo ) }",
-                HelperMethods.RuntimeErrorOnLine1("def requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("def requires exactly 2 arguments, got 1.")
             ),
             (
                 "{ ( def foo 1 2 ) }",
-                HelperMethods.RuntimeErrorOnLine1("def requires at most 2 arguments, got 3.")
+                HelperMethods.RuntimeErrorOnLine1("def requires exactly 2 arguments, got 3.")
             )
         );
     }

@@ -208,5 +208,80 @@ internal class InterpreterArithmeticTests
             testConsole.Write("0.20000000000000018");
         });
     }
+
+    [Test]
+    public static void Remainder_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( % 1 "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("% unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Remainder_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( % 1 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("% requires exactly 2 arguments, got 1.")
+            ),
+            (
+                """{ ( % 1 2 3) }""",
+                HelperMethods.RuntimeErrorOnLine1("% requires exactly 2 arguments, got 3.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Power_ValidArgs()
+    {
+        var input = """
+            {
+                ( print ( ^ 2 3 ) )
+                ( print ( ^ 16 0.5 ) )
+                ( print ( ^ 2.5 2 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("8");
+            testConsole.Write("4");
+            testConsole.Write("6.25");
+        });
+    }
+
+    [Test]
+    public static void Power_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( ^ 1 "bar" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("^ unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Power_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( ^ 1 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("^ requires exactly 2 arguments, got 1.")
+            ),
+            (
+                """{ ( ^ 1 2 3) }""",
+                HelperMethods.RuntimeErrorOnLine1("^ requires exactly 2 arguments, got 3.")
+            )
+        );
+    }
     #endregion
 }

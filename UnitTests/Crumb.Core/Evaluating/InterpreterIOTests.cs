@@ -107,7 +107,7 @@ internal static class InterpreterIOTests
     {
         var input = "{ ( inputLine 1 ) }";
 
-        var expected = HelperMethods.RuntimeErrorOnLine1("inputLine requires at most 0 arguments, got 1.");
+        var expected = HelperMethods.RuntimeErrorOnLine1("inputLine takes no arguments, got 1.");
 
         HelperMethods.ExecuteForRuntimeError((input, expected));
     }

@@ -97,7 +97,7 @@ public static class Interpreter
 
     private static VoidNode Define(int lineNumber, List<AstNode> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Define);
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Define);
 
         var identifier = args[0];
         var value = args[1];
@@ -111,7 +111,7 @@ public static class Interpreter
 
     private static VoidNode Mutate(int lineNumber, List<AstNode> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Mutate);
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Mutate);
 
         var identifier = args[0];
         var value = args[1];
@@ -128,7 +128,7 @@ public static class Interpreter
 
     private static FunctionNode Function(int lineNumber, List<AstNode> args)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 1, 2, Names.Function);
+        HelperMethods.ValidateRangeArgCount(lineNumber, args, 1, 2, Names.Function);
 
         var functionArguments = new List<AstNode>();
         var bodyArg = 0;

@@ -5,20 +5,20 @@ internal partial class NativeFunctions
 {
 #pragma warning disable IDE0060 // Remove unused parameter
     internal static Node Add(int lineNumber, List<Node> args, Scope scope) =>
-        HelperMethods.ExecuteBasicMathFunction(lineNumber, args, Names.Add);
+        ExecuteBasicMathFunction(lineNumber, args, Names.Add);
 
     internal static Node Subtract(int lineNumber, List<Node> args, Scope scope) =>
-        HelperMethods.ExecuteBasicMathFunction(lineNumber, args, Names.Subtract);
+        ExecuteBasicMathFunction(lineNumber, args, Names.Subtract);
 
     internal static Node Multiply(int lineNumber, List<Node> args, Scope scope) =>
-        HelperMethods.ExecuteBasicMathFunction(lineNumber, args, Names.Multiply);
+        ExecuteBasicMathFunction(lineNumber, args, Names.Multiply);
 
     internal static Node Divide(int lineNumber, List<Node> args, Scope scope) =>
-        HelperMethods.ExecuteBasicMathFunction(lineNumber, args, Names.Divide);
+        ExecuteBasicMathFunction(lineNumber, args, Names.Divide);
 
     internal static Node Remainder(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 2, 2, Names.Remainder);
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Remainder);
 
         HelperMethods.ValidateNumber(lineNumber, args, Names.Remainder);
 
@@ -29,6 +29,58 @@ internal partial class NativeFunctions
         else
         {
             return new IntegerNode(HelperMethods.GetIntegerValue(args[0]) % HelperMethods.GetIntegerValue(args[1]));
+        }
+    }
+
+    internal static Node Power(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Power);
+
+        HelperMethods.ValidateNumber(lineNumber, args, Names.Power);
+
+        var a = HelperMethods.GetFloatValue(args[0]);
+        var b = HelperMethods.GetFloatValue(args[1]);
+
+        return new FloatNode(Math.Pow(a, b));
+    }
+
+    private static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, string name)
+    {
+        HelperMethods.ValidateMinArgCount(lineNumber, args, 2, name);
+
+        HelperMethods.ValidateNumber(lineNumber, args, name);
+
+        if (HelperMethods.CheckForFloat(args))
+        {
+            return new FloatNode(args.Skip(1).Aggregate(
+                HelperMethods.GetFloatValue(args[0]),
+                (acc, node) => {
+                    return name switch
+                    {
+                        Names.Add => acc + HelperMethods.GetFloatValue(node),
+                        Names.Subtract => acc - HelperMethods.GetFloatValue(node),
+                        Names.Multiply => acc * HelperMethods.GetFloatValue(node),
+                        Names.Divide => acc / HelperMethods.GetFloatValue(node),
+                        _ => throw HelperMethods.UnreachableCode($"invalid math operation {name}")
+                    };
+                }
+            ));
+        }
+        else
+        {
+            return new IntegerNode(args.Skip(1).Aggregate(
+                HelperMethods.GetIntegerValue(args[0]),
+                (acc, node) => {
+                    return name switch
+                    {
+                        Names.Add => acc + HelperMethods.GetIntegerValue(node),
+                        Names.Subtract => acc - HelperMethods.GetIntegerValue(node),
+                        Names.Multiply => acc * HelperMethods.GetIntegerValue(node),
+                        Names.Divide => acc / HelperMethods.GetIntegerValue(node),
+                        _ => throw HelperMethods.UnreachableCode($"invalid math operation {name}")
+                    };
+                }
+            ));
         }
     }
 #pragma warning restore IDE0060 // Remove unused parameter

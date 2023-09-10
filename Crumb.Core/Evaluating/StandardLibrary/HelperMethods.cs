@@ -3,10 +3,25 @@
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal class HelperMethods
 {
-    internal static void ValidateArgCount<T>(int lineNumber, List<T> args, int min, int max, string name)
+    internal static void ValidateRangeArgCount<T>(int lineNumber, List<T> args, int min, int max, string name)
     {
         ValidateMinArgCount(lineNumber, args, min, name);
         ValidateMaxArgCount(lineNumber, args, max, name);
+    }
+
+    internal static void ValidateExactArgCount<T>(int lineNumber, List<T> args, int exact, string name) {
+        if (args.Count != exact)
+        {
+            throw new RuntimeException(lineNumber, $"{name} requires exactly {exact} arguments, got {args.Count}.");
+        }
+    }
+
+    internal static void ValidateNoArgs<T>(int lineNumber, List<T> args, string name)
+    {
+        if (args.Count > 0)
+        {
+            throw new RuntimeException(lineNumber, $"{name} takes no arguments, got {args.Count}.");
+        }
     }
 
     internal static void ValidateMinArgCount<T>(int lineNumber, List<T> args, int min, string name)
@@ -83,46 +98,6 @@ internal class HelperMethods
         NodeTypes.Integer => ((IntegerNode)node).Value,
         _ => throw UnreachableCode($"expected integer, got {node.Type}"),
     };
-
-    internal static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, string name)
-    {
-        ValidateMinArgCount(lineNumber, args, 2, name);
-
-        ValidateNumber(lineNumber, args, name);
-
-        if (CheckForFloat(args))
-        {
-            return new FloatNode(args.Skip(1).Aggregate(
-                GetFloatValue(args[0]),
-                (acc, node) => {
-                    return name switch
-                    {
-                        Names.Add => acc + GetFloatValue(node),
-                        Names.Subtract => acc - GetFloatValue(node),
-                        Names.Multiply => acc * GetFloatValue(node),
-                        Names.Divide => acc / GetFloatValue(node),
-                        _ => throw UnreachableCode($"invalid math operation {name}")
-                    };
-                }
-            ));
-        }
-        else
-        {
-            return new IntegerNode(args.Skip(1).Aggregate(
-                GetIntegerValue(args[0]),
-                (acc, node) => {
-                    return name switch
-                    {
-                        Names.Add => acc + GetIntegerValue(node),
-                        Names.Subtract => acc - GetIntegerValue(node),
-                        Names.Multiply => acc * GetIntegerValue(node),
-                        Names.Divide => acc / GetIntegerValue(node),
-                        _ => throw UnreachableCode($"invalid math operation {name}")
-                    };
-                }
-            ));
-        }
-    }
 
     internal static NotImplementedException UnreachableCode(string error) =>
         new($"unreachable code : {error}");

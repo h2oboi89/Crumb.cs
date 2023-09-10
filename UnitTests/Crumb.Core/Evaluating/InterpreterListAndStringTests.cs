@@ -57,11 +57,11 @@ internal class InterpreterListAndStringTests
         {
             (
                 "{ ( len ) } ",
-                HelperMethods.RuntimeErrorOnLine1("len requires at least 1 arguments, got 0.")
+                HelperMethods.RuntimeErrorOnLine1("len requires exactly 1 arguments, got 0.")
             ),
             (
                 "{ ( len 1 2 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("len requires at most 1 arguments, got 2.")
+                HelperMethods.RuntimeErrorOnLine1("len requires exactly 1 arguments, got 2.")
             )
         };
 
@@ -165,11 +165,11 @@ internal class InterpreterListAndStringTests
         {
             (
                 "{ ( map 1 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("map requires at least 2 arguments, got 1.")
+                HelperMethods.RuntimeErrorOnLine1("map requires exactly 2 arguments, got 1.")
             ),
             (
                 "{ ( map 1 2 3 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("map requires at most 2 arguments, got 3.")
+                HelperMethods.RuntimeErrorOnLine1("map requires exactly 2 arguments, got 3.")
             )
         };
 

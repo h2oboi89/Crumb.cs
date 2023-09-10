@@ -41,7 +41,7 @@ internal partial class NativeFunctions
 
     internal static StringNode InputLine(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.InputLine);
+        HelperMethods.ValidateNoArgs(lineNumber, args, Names.InputLine);
 
         var line = BuiltIns.Console.ReadLine();
 
@@ -50,21 +50,21 @@ internal partial class NativeFunctions
 
     internal static IntegerNode Rows(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Rows);
+        HelperMethods.ValidateNoArgs(lineNumber, args, Names.Rows);
 
         return new IntegerNode(BuiltIns.Console.WindowHeight);
     }
 
     internal static IntegerNode Columns(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Columns);
+        HelperMethods.ValidateNoArgs(lineNumber, args, Names.Columns);
 
         return new IntegerNode(BuiltIns.Console.WindowWidth);
     }
 
     internal static VoidNode Clear(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateArgCount(lineNumber, args, 0, 0, Names.Clear);
+        HelperMethods.ValidateNoArgs(lineNumber, args, Names.Clear);
 
         BuiltIns.Console.Clear();
 

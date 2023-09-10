@@ -47,6 +47,8 @@ internal static class Names
     public const string Remainder = "%";
     public const string Power = "^";
     public const string Random = "random";
+    public const string Floor = "floor";
+    public const string Ceiling = "ceiling";
 
     // TODO: bitwise? <<, <<<, >>, >>>, &, |, ~, ^
 

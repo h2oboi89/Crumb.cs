@@ -39,8 +39,10 @@ public static class BuiltIns
         { Names.Multiply, StandardLibrary.NativeFunctions.Multiply },
         { Names.Divide, StandardLibrary.NativeFunctions.Divide },
         { Names.Remainder, StandardLibrary.NativeFunctions.Remainder },
-        //public const string Power = "^";
+        { Names.Power, StandardLibrary.NativeFunctions.Power },
         //public const string Random = "random";
+        //public const string Floor = "floor";
+        //public const string Ceiling = "ceiling";
 
         // TODO: bitwise? <<, <<<, >>, >>>, &, |, ~, ^
 
