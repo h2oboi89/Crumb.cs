@@ -148,7 +148,7 @@ internal class InterpreterListAndStringTests
             ),
             (
                 "{ ( map [ ] 1 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("map unexpected Integer, expected one of [ Function, NativeFunction ].")
+                HelperMethods.RuntimeErrorOnLine1("map unexpected Integer, expected Function.")
             )
         };
 
@@ -211,7 +211,7 @@ internal class InterpreterListAndStringTests
             ),
             (
                 "{ ( reduce [ ] 1 0 ) } ",
-                HelperMethods.RuntimeErrorOnLine1("reduce unexpected Integer, expected one of [ Function, NativeFunction ].")
+                HelperMethods.RuntimeErrorOnLine1("reduce unexpected Integer, expected Function.")
             )
         };
 

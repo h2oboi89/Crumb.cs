@@ -59,7 +59,7 @@ internal partial class NativeFunctions
         HelperMethods.ValidateArgType(lineNumber, args[0], Names.Map, NodeTypes.List);
         var list = (ListNode)args[0];
 
-        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Map, NodeTypes.Function, NodeTypes.NativeFunction);
+        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Map, NodeTypes.Function);
         var function = args[1];
 
         var result = new List<Node>();
@@ -85,7 +85,7 @@ internal partial class NativeFunctions
         HelperMethods.ValidateArgType(lineNumber, args[0], Names.Reduce, NodeTypes.List);
         var list = (ListNode)args[0];
 
-        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Reduce, NodeTypes.Function, NodeTypes.NativeFunction);
+        HelperMethods.ValidateArgType(lineNumber, args[1], Names.Reduce, NodeTypes.Function);
         var function = args[1];
 
         var accumulator = (Node)VoidNode.GetInstance();

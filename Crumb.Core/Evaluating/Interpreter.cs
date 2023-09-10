@@ -54,7 +54,7 @@ public static class Interpreter
             return result;
         }
 
-        throw new RuntimeException(node.LineNumber, $"expected block, got {node.OpCode}.");
+        throw RuntimeException.UnreachableCode(node.LineNumber, $"expected block, got {node.OpCode}.");
     }
 
     private static Node EvaluateApply(AstNode node, Scope scope)
@@ -174,7 +174,7 @@ public static class Interpreter
         else
         {
             // should be handled by lexer
-            throw new RuntimeException(node.LineNumber, $"invalid value for integer: '{node.Value}'.");
+            throw RuntimeException.UnreachableCode(node.LineNumber, $"invalid value for integer: '{node.Value}'.");
         }
     }
 
@@ -187,7 +187,7 @@ public static class Interpreter
         else
         {
             // should be handled by lexer
-            throw new RuntimeException(node.LineNumber, $"invalid value for integer: '{node.Value}'");
+            throw RuntimeException.UnreachableCode(node.LineNumber, $"invalid value for integer: '{node.Value}'");
         }
     }
 
@@ -197,7 +197,6 @@ public static class Interpreter
     {
         var value = scope.Get(node.Value);
 
-        // should be handled by lexer
         return value ?? throw RuntimeException.UndefinedReference(node.LineNumber, node.Value);
     }
 
@@ -205,6 +204,7 @@ public static class Interpreter
     {
         if (node is NativeFunctionNode nativeFunction)
         {
+            // TODO: do we ever hit this case?
             return EvaluateNativeFunction(lineNumber, nativeFunction, args, scope);
         }
         if (node is FunctionNode function)
@@ -212,7 +212,7 @@ public static class Interpreter
             return EvaluateFunction(lineNumber, function, args, scope);
         }
 
-        throw new RuntimeException(lineNumber, $"Expected function, got {node.Type}");
+        throw RuntimeException.UnreachableCode(lineNumber, $"Expected function, got {node.Type}");
     }
 
     private static Node EvaluateNativeFunction(int lineNumber, NativeFunctionNode node, List<Node> args, Scope scope) =>
