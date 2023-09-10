@@ -15,7 +15,7 @@ internal partial class NativeFunctions
         {
             NodeTypes.List => new IntegerNode(((ListNode)args[0]).Value.Count),
             NodeTypes.String => new IntegerNode(((StringNode)args[0]).Value.Length),
-            _ => throw HelperMethods.UnreachableCode($"{Names.Length}: expected string or list"),
+            _ => throw RuntimeException.UnreachableCode(lineNumber, $"{Names.Length}: expected string or list"),
         };
     }
 

@@ -1,6 +1,4 @@
-﻿using Crumb.Core.Evaluating.Nodes;
-
-namespace Crumb.Core.Evaluating;
+﻿namespace Crumb.Core.Evaluating;
 
 public class RuntimeException : Exception
 {
@@ -10,4 +8,7 @@ public class RuntimeException : Exception
 
     public static RuntimeException UndefinedReference(int lineNumber, string name) =>
         new(lineNumber, $"undefined reference to '{name}'.");
+
+    internal static NotImplementedException UnreachableCode(int lineNumber, string error) =>
+        new($"reached unreachable code @ line {lineNumber}: {error}");
 }

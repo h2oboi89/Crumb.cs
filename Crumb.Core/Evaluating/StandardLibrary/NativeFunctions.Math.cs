@@ -26,11 +26,15 @@ internal partial class NativeFunctions
 
         if (HelperMethods.CheckForFloat(args))
         {
-            return new FloatNode(HelperMethods.GetFloatValue(args[0]) % HelperMethods.GetFloatValue(args[1]));
+            var a = HelperMethods.GetFloatValue(lineNumber, args[0]);
+            var b = HelperMethods.GetFloatValue(lineNumber, args[1]);
+            return new FloatNode(a % b);
         }
         else
         {
-            return new IntegerNode(HelperMethods.GetIntegerValue(args[0]) % HelperMethods.GetIntegerValue(args[1]));
+            var a = HelperMethods.GetIntegerValue(lineNumber, args[0]);
+            var b = HelperMethods.GetIntegerValue(lineNumber, args[1]);
+            return new IntegerNode(a % b);
         }
     }
 
@@ -40,8 +44,8 @@ internal partial class NativeFunctions
 
         HelperMethods.ValidateNumber(lineNumber, args, Names.Power);
 
-        var a = HelperMethods.GetFloatValue(args[0]);
-        var b = HelperMethods.GetFloatValue(args[1]);
+        var a = HelperMethods.GetFloatValue(lineNumber, args[0]);
+        var b = HelperMethods.GetFloatValue(lineNumber, args[1]);
 
         return new FloatNode(Math.Pow(a, b));
     }
@@ -76,16 +80,16 @@ internal partial class NativeFunctions
         if (HelperMethods.CheckForFloat(args))
         {
             return new FloatNode(args.Skip(1).Aggregate(
-                HelperMethods.GetFloatValue(args[0]),
+                HelperMethods.GetFloatValue(lineNumber, args[0]),
                 (acc, node) =>
                 {
                     return name switch
                     {
-                        Names.Add => acc + HelperMethods.GetFloatValue(node),
-                        Names.Subtract => acc - HelperMethods.GetFloatValue(node),
-                        Names.Multiply => acc * HelperMethods.GetFloatValue(node),
-                        Names.Divide => acc / HelperMethods.GetFloatValue(node),
-                        _ => throw HelperMethods.UnreachableCode($"invalid math operation {name}")
+                        Names.Add => acc + HelperMethods.GetFloatValue(lineNumber, node),
+                        Names.Subtract => acc - HelperMethods.GetFloatValue(lineNumber, node),
+                        Names.Multiply => acc * HelperMethods.GetFloatValue(lineNumber, node),
+                        Names.Divide => acc / HelperMethods.GetFloatValue(lineNumber, node),
+                        _ => throw RuntimeException.UnreachableCode(lineNumber, $"invalid math operation {name}")
                     };
                 }
             ));
@@ -93,16 +97,16 @@ internal partial class NativeFunctions
         else
         {
             return new IntegerNode(args.Skip(1).Aggregate(
-                HelperMethods.GetIntegerValue(args[0]),
+                HelperMethods.GetIntegerValue(lineNumber, args[0]),
                 (acc, node) =>
                 {
                     return name switch
                     {
-                        Names.Add => acc + HelperMethods.GetIntegerValue(node),
-                        Names.Subtract => acc - HelperMethods.GetIntegerValue(node),
-                        Names.Multiply => acc * HelperMethods.GetIntegerValue(node),
-                        Names.Divide => acc / HelperMethods.GetIntegerValue(node),
-                        _ => throw HelperMethods.UnreachableCode($"invalid math operation {name}")
+                        Names.Add => acc + HelperMethods.GetIntegerValue(lineNumber, node),
+                        Names.Subtract => acc - HelperMethods.GetIntegerValue(lineNumber, node),
+                        Names.Multiply => acc * HelperMethods.GetIntegerValue(lineNumber, node),
+                        Names.Divide => acc / HelperMethods.GetIntegerValue(lineNumber, node),
+                        _ => throw RuntimeException.UnreachableCode(lineNumber, $"invalid math operation {name}")
                     };
                 }
             ));

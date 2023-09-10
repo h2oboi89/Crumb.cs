@@ -27,7 +27,7 @@ public static class Interpreter
             OpCodes.Float => EvaluateFloat(node),
             OpCodes.String => EvaluateString(node),
             OpCodes.Identifier => EvaluateIdentifier(node, scope),
-            _ => throw new RuntimeException(node.LineNumber, $"unknown op code {node.OpCode}"),
+            _ => throw RuntimeException.UnreachableCode(node.LineNumber, $"unknown op code {node.OpCode}"),
         };
     }
 

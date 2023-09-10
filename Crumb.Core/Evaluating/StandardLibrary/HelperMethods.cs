@@ -86,19 +86,16 @@ internal class HelperMethods
 
     internal static bool CheckForFloat(List<Node> args) => args.Any(a => a.Type == NodeTypes.Float);
 
-    internal static double GetFloatValue(Node node) => node.Type switch
+    internal static double GetFloatValue(int lineNumber, Node node) => node.Type switch
     {
         NodeTypes.Float => ((FloatNode)node).Value,
         NodeTypes.Integer => ((IntegerNode)node).Value,
-        _ => throw UnreachableCode($"expected float or integer, got {node.Type}"),
+        _ => throw RuntimeException.UnreachableCode(lineNumber, $"expected float or integer, got {node.Type}"),
     };
 
-    internal static int GetIntegerValue(Node node) => node.Type switch
+    internal static int GetIntegerValue(int lineNumber, Node node) => node.Type switch
     {
         NodeTypes.Integer => ((IntegerNode)node).Value,
-        _ => throw UnreachableCode($"expected integer, got {node.Type}"),
+        _ => throw RuntimeException.UnreachableCode(lineNumber, $"expected integer, got {node.Type}"),
     };
-
-    internal static NotImplementedException UnreachableCode(string error) =>
-        new($"unreachable code : {error}");
 }
