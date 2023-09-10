@@ -60,7 +60,7 @@ internal partial class NativeFunctions
         var list = (ListNode)args[0];
 
         HelperMethods.ValidateArgType(lineNumber, args[1], Names.Map, NodeTypes.Function);
-        var function = args[1];
+        var function = (FunctionNode)args[1];
 
         var result = new List<Node>();
 
@@ -72,7 +72,7 @@ internal partial class NativeFunctions
                 new IntegerNode(i),
             };
 
-            result.Add(Interpreter.ExecuteFunction(lineNumber, function, mapFuncArgs, scope));
+            result.Add(Interpreter.EvaluateFunction(lineNumber, function, mapFuncArgs, scope));
         }
 
         return new ListNode(result);
@@ -86,7 +86,7 @@ internal partial class NativeFunctions
         var list = (ListNode)args[0];
 
         HelperMethods.ValidateArgType(lineNumber, args[1], Names.Reduce, NodeTypes.Function);
-        var function = args[1];
+        var function = (FunctionNode)args[1];
 
         var accumulator = (Node)VoidNode.GetInstance();
 
@@ -104,7 +104,7 @@ internal partial class NativeFunctions
                 new IntegerNode(i),
             };
 
-            accumulator = Interpreter.ExecuteFunction(lineNumber, function, reduceFuncArgs, scope);
+            accumulator = Interpreter.EvaluateFunction(lineNumber, function, reduceFuncArgs, scope);
         }
 
         return accumulator;

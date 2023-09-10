@@ -200,25 +200,10 @@ public static class Interpreter
         return value ?? throw RuntimeException.UndefinedReference(node.LineNumber, node.Value);
     }
 
-    internal static Node ExecuteFunction(int lineNumber, Node node, List<Node> args, Scope scope)
-    {
-        if (node is NativeFunctionNode nativeFunction)
-        {
-            // TODO: do we ever hit this case?
-            return EvaluateNativeFunction(lineNumber, nativeFunction, args, scope);
-        }
-        if (node is FunctionNode function)
-        {
-            return EvaluateFunction(lineNumber, function, args, scope);
-        }
-
-        throw RuntimeException.UnreachableCode(lineNumber, $"Expected function, got {node.Type}");
-    }
-
     private static Node EvaluateNativeFunction(int lineNumber, NativeFunctionNode node, List<Node> args, Scope scope) =>
         node.Value(lineNumber, args, scope);
 
-    private static Node EvaluateFunction(int lineNumber, FunctionNode node, List<Node> args, Scope scope)
+    internal static Node EvaluateFunction(int lineNumber, FunctionNode node, List<Node> args, Scope scope)
     {
         var localScope = new Scope(scope);
 
