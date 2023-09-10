@@ -3,6 +3,8 @@
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal partial class NativeFunctions
 {
+    internal static Random random = new();
+
 #pragma warning disable IDE0060 // Remove unused parameter
     internal static Node Add(int lineNumber, List<Node> args, Scope scope) =>
         ExecuteBasicMathFunction(lineNumber, args, Names.Add);
@@ -32,7 +34,7 @@ internal partial class NativeFunctions
         }
     }
 
-    internal static Node Power(int lineNumber, List<Node> args, Scope scope)
+    internal static FloatNode Power(int lineNumber, List<Node> args, Scope scope)
     {
         HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Power);
 
@@ -44,6 +46,27 @@ internal partial class NativeFunctions
         return new FloatNode(Math.Pow(a, b));
     }
 
+    internal static FloatNode Random(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateNoArgs(lineNumber, args, Names.Random);
+
+        return new FloatNode(random.NextDouble());
+    }
+
+    internal static VoidNode Seed(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Seed);
+
+        HelperMethods.ValidateArgType(lineNumber, args[0], Names.Seed, NodeTypes.Integer);
+
+        var seed = ((IntegerNode)args[0]).Value;
+
+        random = new Random(seed);
+
+        return VoidNode.GetInstance();
+    }
+#pragma warning restore IDE0060 // Remove unused parameter
+
     private static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, string name)
     {
         HelperMethods.ValidateMinArgCount(lineNumber, args, 2, name);
@@ -54,7 +77,8 @@ internal partial class NativeFunctions
         {
             return new FloatNode(args.Skip(1).Aggregate(
                 HelperMethods.GetFloatValue(args[0]),
-                (acc, node) => {
+                (acc, node) =>
+                {
                     return name switch
                     {
                         Names.Add => acc + HelperMethods.GetFloatValue(node),
@@ -70,7 +94,8 @@ internal partial class NativeFunctions
         {
             return new IntegerNode(args.Skip(1).Aggregate(
                 HelperMethods.GetIntegerValue(args[0]),
-                (acc, node) => {
+                (acc, node) =>
+                {
                     return name switch
                     {
                         Names.Add => acc + HelperMethods.GetIntegerValue(node),
@@ -83,5 +108,4 @@ internal partial class NativeFunctions
             ));
         }
     }
-#pragma warning restore IDE0060 // Remove unused parameter
 }

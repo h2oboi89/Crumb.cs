@@ -283,5 +283,77 @@ internal class InterpreterArithmeticTests
             )
         );
     }
+
+    [Test]
+    public static void Random_ValidTests()
+    {
+        var input = """
+            {
+                ( seed 0 )
+                ( print ( random ) )
+                ( print ( random ) )
+                ( print ( random ) )
+
+                ( seed 1 )
+                ( print ( random ) )
+                ( print ( random ) )
+                ( print ( random ) )
+
+                ( seed 0 )
+                ( print ( random ) )
+                ( print ( random ) )
+                ( print ( random ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("0.7262432699679598");
+            testConsole.Write("0.8173253595909687");
+            testConsole.Write("0.7680226893946634");
+
+            testConsole.Write("0.24866858415709278");
+            testConsole.Write("0.11074397718102856");
+            testConsole.Write("0.46701067987224587");
+
+            testConsole.Write("0.7262432699679598");
+            testConsole.Write("0.8173253595909687");
+            testConsole.Write("0.7680226893946634");
+        });
+    }
+
+    [Test]
+    public static void Random_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( seed "1" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("seed unexpected String, expected Integer.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Random_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( seed ) }""",
+                HelperMethods.RuntimeErrorOnLine1("seed requires exactly 1 arguments, got 0.")
+            ),
+            (
+                """{ ( seed 1 2 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("seed requires exactly 1 arguments, got 2.")
+            ),
+            (
+                """{ ( random 1 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("random takes no arguments, got 1.")
+            )
+        );
+    }
     #endregion
 }
