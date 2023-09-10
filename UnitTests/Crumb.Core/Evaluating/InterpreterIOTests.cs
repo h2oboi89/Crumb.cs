@@ -183,5 +183,24 @@ internal static class InterpreterIOTests
             testConsole.Clear();
         });
     }
+
+    [Test]
+    public static void RowsColumnsClear_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( rows 1) }""",
+                HelperMethods.RuntimeErrorOnLine1("rows takes no arguments, got 1.")
+            ),
+            (
+                """{ ( columns 1 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("columns takes no arguments, got 1.")
+            ),
+            (
+                """{ ( clear 1 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("clear takes no arguments, got 1.")
+            )
+        );
+    }
     #endregion
 }
