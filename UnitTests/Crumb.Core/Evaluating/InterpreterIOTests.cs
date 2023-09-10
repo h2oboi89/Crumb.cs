@@ -105,9 +105,26 @@ internal static class InterpreterIOTests
     [Test]
     public static void InputLine_InvalidArgCount_Throws()
     {
-        var input = "{ ( inputLine 1 ) }";
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( inputLine 1) }""",
+                HelperMethods.RuntimeErrorOnLine1("inputLine takes no arguments, got 1.")
+            )
+        );
+    }
 
-        var expected = HelperMethods.RuntimeErrorOnLine1("inputLine takes no arguments, got 1.");
+    [Test]
+    public static void InputLine_NullReturn_Throws()
+    {
+        var input = "{ ( inputLine ) }";
+
+        var expected = HelperMethods.RuntimeErrorOnLine1("inputLine unable to get input.");
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+        testConsole.ReadLine().Returns((string)null);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
         HelperMethods.ExecuteForRuntimeError((input, expected));
     }

@@ -45,7 +45,7 @@ internal partial class NativeFunctions
 
         var line = BuiltIns.Console.ReadLine();
 
-        return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine}: unable to get input.") : new StringNode(line);
+        return line == null ? throw new RuntimeException(lineNumber, $"{Names.InputLine} unable to get input.") : new StringNode(line);
     }
 
     internal static IntegerNode Rows(int lineNumber, List<Node> args, Scope scope)
