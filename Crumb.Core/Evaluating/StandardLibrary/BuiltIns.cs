@@ -42,9 +42,9 @@ public static class BuiltIns
         { Names.Power, StandardLibrary.NativeFunctions.Power },
         { Names.Random, StandardLibrary.NativeFunctions.Random },
         { Names.Seed, StandardLibrary.NativeFunctions.Seed },
-        //public const string Floor = "floor";
-        //public const string Ceiling = "ceiling";
-        //public const string Round = "round";
+        { Names.Floor, StandardLibrary.NativeFunctions.Floor },
+        { Names.Ceiling, StandardLibrary.NativeFunctions.Ceiling },
+        { Names.Round, StandardLibrary.NativeFunctions.Round },
 
         // TODO: bitwise? <<, <<<, >>, >>>, &, |, ~, ^
 

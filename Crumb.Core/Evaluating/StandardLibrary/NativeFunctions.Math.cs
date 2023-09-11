@@ -69,6 +69,39 @@ internal partial class NativeFunctions
 
         return VoidNode.GetInstance();
     }
+
+    internal static IntegerNode Floor(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Floor);
+
+        HelperMethods.ValidateNumber(lineNumber, args, Names.Floor);
+
+        var value = HelperMethods.GetFloatValue(lineNumber, args[0]);
+
+        return new IntegerNode((int)Math.Floor(value));
+    }
+
+    internal static IntegerNode Ceiling(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Ceiling);
+
+        HelperMethods.ValidateNumber(lineNumber, args, Names.Ceiling);
+
+        var value = HelperMethods.GetFloatValue(lineNumber, args[0]);
+
+        return new IntegerNode((int)Math.Ceiling(value));
+    }
+
+    internal static IntegerNode Round(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Round);
+
+        HelperMethods.ValidateNumber(lineNumber, args, Names.Round);
+
+        var value = HelperMethods.GetFloatValue(lineNumber, args[0]);
+
+        return new IntegerNode((int)Math.Round(value));
+    }
 #pragma warning restore IDE0060 // Remove unused parameter
 
     private static Node ExecuteBasicMathFunction(int lineNumber, List<Node> args, string name)

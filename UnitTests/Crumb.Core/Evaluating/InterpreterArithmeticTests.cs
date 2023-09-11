@@ -187,7 +187,7 @@ internal class InterpreterArithmeticTests
     }
 
     [Test]
-    public static void Remainder_ValidArgs()
+    public static void Remainder()
     {
         var input = """
             {
@@ -236,7 +236,7 @@ internal class InterpreterArithmeticTests
     }
 
     [Test]
-    public static void Power_ValidArgs()
+    public static void Power()
     {
         var input = """
             {
@@ -285,7 +285,7 @@ internal class InterpreterArithmeticTests
     }
 
     [Test]
-    public static void Random_ValidTests()
+    public static void Random()
     {
         var input = """
             {
@@ -352,6 +352,177 @@ internal class InterpreterArithmeticTests
             (
                 """{ ( random 1 ) }""",
                 HelperMethods.RuntimeErrorOnLine1("random takes no arguments, got 1.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Floor()
+    {
+        var input = """
+            {
+                ( print ( floor 1.0 ) )
+                ( print ( floor 1.4 ) )
+                ( print ( floor 1.5 ) )
+                ( print ( floor 1.6 ) )
+                ( print ( floor -1.4 ) )
+                ( print ( floor -1.5 ) )
+                ( print ( floor -1.6 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write("1");
+            testConsole.Write("1");
+            testConsole.Write("1");
+            testConsole.Write("-2");
+            testConsole.Write("-2");
+            testConsole.Write("-2");
+        });
+    }
+
+    [Test]
+    public static void Floor_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( floor "foo" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("floor unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Floor_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( floor ) }""",
+                HelperMethods.RuntimeErrorOnLine1("floor requires exactly 1 arguments, got 0.")
+            ),
+            (
+                """{ ( floor 1 2 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("floor requires exactly 1 arguments, got 2.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Ceiling()
+    {
+        var input = """
+            {
+                ( print ( ceiling 1.0 ) )
+                ( print ( ceiling 1.4 ) )
+                ( print ( ceiling 1.5 ) )
+                ( print ( ceiling 1.6 ) )
+                ( print ( ceiling -1.4 ) )
+                ( print ( ceiling -1.5 ) )
+                ( print ( ceiling -1.6 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write("2");
+            testConsole.Write("2");
+            testConsole.Write("2");
+            testConsole.Write("-1");
+            testConsole.Write("-1");
+            testConsole.Write("-1");
+        });
+    }
+
+    [Test]
+    public static void Ceiling_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( ceiling "foo" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("ceiling unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Ceiling_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( ceiling ) }""",
+                HelperMethods.RuntimeErrorOnLine1("ceiling requires exactly 1 arguments, got 0.")
+            ),
+            (
+                """{ ( ceiling 1 2 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("ceiling requires exactly 1 arguments, got 2.")
+            )
+        );
+    }
+
+    [Test]
+    public static void Round()
+    {
+        var input = """
+            {
+                ( print ( round 1.0 ) )
+                ( print ( round 1.4 ) )
+                ( print ( round 1.5 ) )
+                ( print ( round 1.6 ) )
+                ( print ( round -1.4 ) )
+                ( print ( round -1.5 ) )
+                ( print ( round -1.6 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write("1");
+            testConsole.Write("2");
+            testConsole.Write("2");
+            testConsole.Write("-1");
+            testConsole.Write("-2");
+            testConsole.Write("-2");
+        });
+    }
+
+    [Test]
+    public static void Round_InvalidArg_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( round "foo" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("round unexpected String, expected one of [ Integer, Float ].")
+            )
+        );
+    }
+
+    [Test]
+    public static void Round_InvalidArgCount_Throws()
+    {
+        HelperMethods.ExecuteForRuntimeError(
+            (
+                """{ ( round ) }""",
+                HelperMethods.RuntimeErrorOnLine1("round requires exactly 1 arguments, got 0.")
+            ),
+            (
+                """{ ( round 1 2 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("round requires exactly 1 arguments, got 2.")
             )
         );
     }
