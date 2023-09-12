@@ -15,6 +15,17 @@ public class BooleanNode : Node
 
     public override string ToString() => Value.ToString().ToLower();
 
+    public static BooleanNode GetInstance(bool value)
+    {
+        switch (value)
+        {
+            case true:
+                return GetTrueInstance();
+            case false:
+                return GetFalseInstance();
+        }
+    }
+
     public static BooleanNode GetTrueInstance() => _trueInstance;
     public static BooleanNode GetFalseInstance() => _falseInstance;
 }

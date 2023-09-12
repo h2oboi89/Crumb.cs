@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Crumb.Core.Parsing;
-public class AstNode
+public class AstNode : IEquatable<AstNode>
 {
     private const string INDENT = "    ";
 
@@ -44,4 +44,39 @@ public class AstNode
     }
 
     public override string ToString() => ToString(0);
+
+    public bool Equals(AstNode? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return OpCode == other.OpCode &&
+            Value == other.Value &&
+            Enumerable.SequenceEqual(Children, other.Children);
+    }
+
+    public override bool Equals(object? obj) => obj is AstNode other && Equals(other);
+
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+        hashCode.Add(OpCode.GetHashCode());
+        hashCode.Add(Value.GetHashCode());
+        foreach(var child in Children)
+        {
+            hashCode.Add(child.GetHashCode());
+        }
+        return hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(AstNode left, AstNode right) => left.Equals(right);
+
+    public static bool operator !=(AstNode left, AstNode right) => !(left == right);
 }

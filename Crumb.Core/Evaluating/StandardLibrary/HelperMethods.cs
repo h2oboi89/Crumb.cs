@@ -9,7 +9,8 @@ internal class HelperMethods
         ValidateMaxArgCount(lineNumber, args, max, name);
     }
 
-    internal static void ValidateExactArgCount<T>(int lineNumber, List<T> args, int exact, string name) {
+    internal static void ValidateExactArgCount<T>(int lineNumber, List<T> args, int exact, string name)
+    {
         if (args.Count != exact)
         {
             throw new RuntimeException(lineNumber, $"{name} requires exactly {exact} arguments, got {args.Count}.");
@@ -51,8 +52,51 @@ internal class HelperMethods
         }
     }
 
+    internal static bool AreAllArgs(List<Node> args, params NodeTypes[] expected)
+    {
+        foreach (var arg in args)
+        {
+            var isAllowed = false;
+            foreach (var allowed in expected)
+            {
+                if (arg.Type == allowed)
+                {
+                    isAllowed = true;
+                    break;
+                }
+            }
+
+            if (!isAllowed)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     internal static bool AreAllArgs(List<Node> args, NodeTypes expected) =>
         args.All(a => a.Type == expected);
+
+    internal static bool AreSameType(List<Node> args)
+    {
+        if (args.Count == 0)
+        {
+            return true;
+        }
+
+        var a = args[0];
+
+        for (var i = 1; i < args.Count; i++)
+        {
+            if (args[i].Type != a.Type)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     internal static void ValidateArgType(int lineNumber, Node arg, string name, NodeTypes expected)
     {

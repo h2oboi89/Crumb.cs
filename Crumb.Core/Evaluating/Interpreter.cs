@@ -7,7 +7,9 @@ public static class Interpreter
 {
     private static int depth = 0;
     // TODO: improve performance to increase recursion limit
-    private const int RECURSION_LIMIT = 500; 
+    private const int RECURSION_LIMIT = 500;
+
+    // TODO: make scope static in here so we don't have to pass it everywhere?
 
     public static Node Evaluate(string[] args, AstNode node)
     {

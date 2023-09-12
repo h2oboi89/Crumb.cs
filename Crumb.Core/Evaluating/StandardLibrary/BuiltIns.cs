@@ -26,7 +26,7 @@ public static class BuiltIns
         //public const string Is = "is";
         //public const string LessThan = "<";
         //public const string GreaterThan = ">";
-        //public const string Equal = "=";
+        { Names.Equal, StandardLibrary.NativeFunctions.Equal },
 
         // logic operators^
         //public const string Not = "not";
@@ -58,6 +58,9 @@ public static class BuiltIns
         //public const string Integer = "integer";
         //public const string Float = "float";
         //public const string String = "string";
+        //public const string Bool = "bool"
+        //public const string ListType = "list";
+        //public const string FunctionType = "function";
         //// TODO: type ??
 
         // list and string methods

@@ -8,7 +8,7 @@ internal class FunctionNode : Node
     public FunctionNode(DefinedFunction value) : base(NodeTypes.Function, value) { }
 
     protected override bool ValueEquals(object otherValue) =>
-        ReferenceEquals(Value, (DefinedFunction)otherValue);
+        Value == (DefinedFunction)otherValue;
 
     protected override int ValueGetHashCode() => Value.GetHashCode();
 
