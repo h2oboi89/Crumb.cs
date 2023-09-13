@@ -50,6 +50,9 @@ internal partial class NativeFunctions
         return new FloatNode(Math.Pow(a, b));
     }
 
+    // TODO: figure out how to make this return a function with embedded Random.cs
+    // ( def r ( random seed ) ) OR ( def r ( random ) ) <- sets r to be a random function
+    // ( r ) <- returns a random value
     internal static FloatNode Random(int lineNumber, List<Node> args, Scope scope)
     {
         HelperMethods.ValidateNoArgs(lineNumber, args, Names.Random);
@@ -57,6 +60,7 @@ internal partial class NativeFunctions
         return new FloatNode(random.NextDouble());
     }
 
+    // TODO: get rid of this once we figure out Random
     internal static VoidNode Seed(int lineNumber, List<Node> args, Scope scope)
     {
         HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Seed);
