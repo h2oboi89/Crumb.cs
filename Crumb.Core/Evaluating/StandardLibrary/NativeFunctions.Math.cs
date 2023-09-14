@@ -50,28 +50,29 @@ internal partial class NativeFunctions
         return new FloatNode(Math.Pow(a, b));
     }
 
-    // TODO: figure out how to make this return a function with embedded Random.cs
-    // ( def r ( random seed ) ) OR ( def r ( random ) ) <- sets r to be a random function
-    // ( r ) <- returns a random value
-    internal static FloatNode Random(int lineNumber, List<Node> args, Scope scope)
+    internal static NativeFunctionNode Random(int lineNumber, List<Node> args, Scope scope)
     {
-        HelperMethods.ValidateNoArgs(lineNumber, args, Names.Random);
+        HelperMethods.ValidateMaxArgCount(lineNumber, args, 1, Names.Random);
 
-        return new FloatNode(random.NextDouble());
-    }
+        Random? random = null;
 
-    // TODO: get rid of this once we figure out Random
-    internal static VoidNode Seed(int lineNumber, List<Node> args, Scope scope)
-    {
-        HelperMethods.ValidateExactArgCount(lineNumber, args, 1, Names.Seed);
+        if (args.Count == 1)
+        {
+            HelperMethods.ValidateArgType(lineNumber, args[0], Names.Random, NodeTypes.Integer);
 
-        HelperMethods.ValidateArgType(lineNumber, args[0], Names.Seed, NodeTypes.Integer);
+            var seed = ((IntegerNode)args[0]).Value;
 
-        var seed = ((IntegerNode)args[0]).Value;
+            random = new Random(seed);
+        }
+        else
+        {
+            random = new Random();
+        }
 
-        random = new Random(seed);
-
-        return VoidNode.GetInstance();
+        return new NativeFunctionNode((int lineNumber, List<Node> args, Scope scope) =>
+        {
+            return new FloatNode(random.NextDouble());
+        });
     }
 
     internal static IntegerNode Floor(int lineNumber, List<Node> args, Scope scope)

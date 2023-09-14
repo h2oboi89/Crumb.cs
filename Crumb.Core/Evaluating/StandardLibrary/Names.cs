@@ -39,7 +39,7 @@ internal static class Names
     public const string And = "and";
     public const string Or = "or";
 
-    // arithmetic
+    // math
     public const string Add = "+";
     public const string Subtract = "-";
     public const string Multiply = "*";
@@ -47,7 +47,6 @@ internal static class Names
     public const string Remainder = "%";
     public const string Power = "^";
     public const string Random = "random";
-    public const string Seed = "seed";
     public const string Floor = "floor";
     public const string Ceiling = "ceiling";
     public const string Round = "round";
