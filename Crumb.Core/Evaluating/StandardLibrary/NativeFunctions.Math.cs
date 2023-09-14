@@ -69,10 +69,8 @@ internal partial class NativeFunctions
             random = new Random();
         }
 
-        return new NativeFunctionNode((int lineNumber, List<Node> args, Scope scope) =>
-        {
-            return new FloatNode(random.NextDouble());
-        });
+        return new NativeFunctionNode((int lineNumber, List<Node> args, Scope scope) => 
+            new FloatNode(random.NextDouble()));
     }
 
     internal static IntegerNode Floor(int lineNumber, List<Node> args, Scope scope)
