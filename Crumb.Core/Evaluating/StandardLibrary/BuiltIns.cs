@@ -33,7 +33,7 @@ public static class BuiltIns
         //public const string And = "and";
         //public const string Or = "or";
 
-        // arithmetic
+        // math
         { Names.Add, StandardLibrary.NativeFunctions.Add },
         { Names.Subtract, StandardLibrary.NativeFunctions.Subtract },
         { Names.Multiply, StandardLibrary.NativeFunctions.Multiply },
@@ -41,7 +41,6 @@ public static class BuiltIns
         { Names.Remainder, StandardLibrary.NativeFunctions.Remainder },
         { Names.Power, StandardLibrary.NativeFunctions.Power },
         { Names.Random, StandardLibrary.NativeFunctions.Random },
-        { Names.Seed, StandardLibrary.NativeFunctions.Seed },
         { Names.Floor, StandardLibrary.NativeFunctions.Floor },
         { Names.Ceiling, StandardLibrary.NativeFunctions.Ceiling },
         { Names.Round, StandardLibrary.NativeFunctions.Round },

@@ -3,7 +3,7 @@
 namespace UnitTests.Crumb.Core.Evaluating;
 
 [TestFixture]
-internal class InterpreterArithmeticTests
+internal class InterpreterMathTests
 {
     #region Setup / TearDown
     [TearDown]
@@ -284,25 +284,32 @@ internal class InterpreterArithmeticTests
         );
     }
 
+    private static bool IsDouble(string x) => double.TryParse(x, out var _);
+
     [Test]
     public static void Random()
     {
         var input = """
             {
-                ( seed 0 )
-                ( print ( random ) )
-                ( print ( random ) )
-                ( print ( random ) )
+                ( def r0 ( random 0 ) )
+                ( print ( r0 ) )
+                ( print ( r0 ) )
+                ( print ( r0 ) )
 
-                ( seed 1 )
-                ( print ( random ) )
-                ( print ( random ) )
-                ( print ( random ) )
+                ( def r1 ( random 1 ) )
+                ( print ( r1 ) )
+                ( print ( r1 ) )
+                ( print ( r1 ) )
 
-                ( seed 0 )
-                ( print ( random ) )
-                ( print ( random ) )
-                ( print ( random ) )
+                ( def r2 ( random 0 ) )
+                ( print ( r2 ) )
+                ( print ( r2 ) )
+                ( print ( r2 ) )
+
+                ( def r3 ( random ) )
+                ( print ( r3 ) )
+                ( print ( r3 ) )
+                ( print ( r3 ) )
             }
             """;
 
@@ -323,6 +330,10 @@ internal class InterpreterArithmeticTests
             testConsole.Write("0.7262432699679598");
             testConsole.Write("0.8173253595909687");
             testConsole.Write("0.7680226893946634");
+
+            testConsole.Write(Arg.Is<string>(x => IsDouble(x)));
+            testConsole.Write(Arg.Is<string>(x => IsDouble(x)));
+            testConsole.Write(Arg.Is<string>(x => IsDouble(x)));
         });
     }
 
@@ -331,8 +342,8 @@ internal class InterpreterArithmeticTests
     {
         HelperMethods.ExecuteForRuntimeError(
             (
-                """{ ( seed "1" ) }""",
-                HelperMethods.RuntimeErrorOnLine1("seed unexpected String, expected Integer.")
+                """{ ( random "1" ) }""",
+                HelperMethods.RuntimeErrorOnLine1("random unexpected String, expected Integer.")
             )
         );
     }
@@ -342,16 +353,8 @@ internal class InterpreterArithmeticTests
     {
         HelperMethods.ExecuteForRuntimeError(
             (
-                """{ ( seed ) }""",
-                HelperMethods.RuntimeErrorOnLine1("seed requires exactly 1 arguments, got 0.")
-            ),
-            (
-                """{ ( seed 1 2 ) }""",
-                HelperMethods.RuntimeErrorOnLine1("seed requires exactly 1 arguments, got 2.")
-            ),
-            (
-                """{ ( random 1 ) }""",
-                HelperMethods.RuntimeErrorOnLine1("random takes no arguments, got 1.")
+                """{ ( random 1 2 ) }""",
+                HelperMethods.RuntimeErrorOnLine1("random requires at most 1 arguments, got 2.")
             )
         );
     }
