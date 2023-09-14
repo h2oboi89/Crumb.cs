@@ -75,6 +75,11 @@ internal class InterpreterComparisonTests
                 ( print ( = [ 1 true ] [ 2 false ] ) )
 
                 ( print ( = void void ) )
+                
+                ( def r1 ( random ) )
+                ( def r2 ( random ) )
+                ( print ( = r1 r1 ) )
+                ( print ( = r1 r2 ) )
             }
             """;
 
@@ -101,6 +106,9 @@ internal class InterpreterComparisonTests
             testConsole.Write("false");
 
             testConsole.Write("true");
+
+            testConsole.Write("true");
+            testConsole.Write("false");
         });
     }
 
