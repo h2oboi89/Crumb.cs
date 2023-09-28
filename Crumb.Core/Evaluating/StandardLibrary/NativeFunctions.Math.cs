@@ -3,8 +3,6 @@
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal partial class NativeFunctions
 {
-    internal static Random random = new();
-
 #pragma warning disable IDE0060 // Remove unused parameter
     internal static Node Add(int lineNumber, List<Node> args, Scope scope) =>
         ExecuteBasicMathFunction(lineNumber, args, Names.Add);
