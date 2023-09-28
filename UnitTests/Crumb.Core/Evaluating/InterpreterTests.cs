@@ -1,4 +1,6 @@
-﻿namespace UnitTests.Crumb.Core.Evaluating;
+﻿using NSubstitute;
+
+namespace UnitTests.Crumb.Core.Evaluating;
 internal static class InterpreterTests
 {
     #region Tests
@@ -47,6 +49,29 @@ internal static class InterpreterTests
             HelperMethods.RuntimeErrorOnLineN("exceeded recursion limit.", 2)
             )
         );
+    }
+
+    [Test]
+    public static void CanRedefineVariable()
+    {
+        var input = """
+            {
+                ( def a 1 )
+                ( print a )
+                ( def a 2 )
+                ( print a )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutput();
+
+        HelperMethods.Execute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("1");
+            testConsole.Write("2");
+        });
     }
     #endregion
 }
