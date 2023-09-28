@@ -32,4 +32,15 @@ internal partial class NativeFunctions
 
         return BooleanNode.GetInstance(a < b);
     }
+
+    internal static BooleanNode GreaterThan(int lineNumber, List<Node> args, Scope scope)
+    {
+        HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.GreaterThan);
+        HelperMethods.ValidateNumber(lineNumber, args, Names.GreaterThan);
+
+        var a = HelperMethods.GetFloatValue(lineNumber, args[0]);
+        var b = HelperMethods.GetFloatValue(lineNumber, args[1]);
+
+        return BooleanNode.GetInstance(a > b);
+    }
 }

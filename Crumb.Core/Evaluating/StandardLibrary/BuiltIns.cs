@@ -25,7 +25,7 @@ public static class BuiltIns
         // comparisons
         //public const string Is = "is";
         { Names.LessThan, StandardLibrary.NativeFunctions.LessThan },
-        //public const string GreaterThan = ">";
+        { Names.GreaterThan, StandardLibrary.NativeFunctions.GreaterThan },
         { Names.Equal, StandardLibrary.NativeFunctions.Equal },
 
         // logic operators^
