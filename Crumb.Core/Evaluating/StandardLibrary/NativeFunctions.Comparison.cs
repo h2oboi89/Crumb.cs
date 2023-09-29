@@ -3,6 +3,7 @@
 namespace Crumb.Core.Evaluating.StandardLibrary;
 internal partial class NativeFunctions
 {
+#pragma warning disable IDE0060 // Remove unused parameter
     internal static BooleanNode Equal(int lineNumber, List<Node> args, Scope scope)
     {
         HelperMethods.ValidateExactArgCount(lineNumber, args, 2, Names.Equal);
@@ -43,4 +44,5 @@ internal partial class NativeFunctions
 
         return BooleanNode.GetInstance(a > b);
     }
+#pragma warning restore IDE0060 // Remove unused parameter
 }

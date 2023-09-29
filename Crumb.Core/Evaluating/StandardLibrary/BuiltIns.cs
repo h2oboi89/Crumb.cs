@@ -29,9 +29,9 @@ public static class BuiltIns
         { Names.Equal, StandardLibrary.NativeFunctions.Equal },
 
         // logic operators^
-        //public const string Not = "not";
-        //public const string And = "and";
-        //public const string Or = "or";
+        { Names.Not, StandardLibrary.NativeFunctions.Not },
+        { Names.And, StandardLibrary.NativeFunctions.And },
+        { Names.Or, StandardLibrary.NativeFunctions.Or },
 
         // math
         { Names.Add, StandardLibrary.NativeFunctions.Add },
