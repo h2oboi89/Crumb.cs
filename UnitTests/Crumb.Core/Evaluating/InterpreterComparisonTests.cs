@@ -302,4 +302,81 @@ internal class InterpreterComparisonTests
             testConsole.Write("false");
         });
     }
+
+    [Test]
+    public static void CombinedComparisons()
+    {
+        var input = """
+            {
+                ( print ( <= 0 1 ) )
+                ( print ( <= 1 0 ) )
+                ( print ( <= 1 1 ) )
+
+                ( print ( <= 0.0 1.0 ) )
+                ( print ( <= 1.0 0.0 ) )
+                ( print ( <= 1.0 1.0 ) )
+
+                ( print ( <= 0 1.0 ) )
+                ( print ( <= 1 0.0 ) )
+                ( print ( <= 1 1.0 ) )
+
+                ( print ( <= 0.0 1 ) )
+                ( print ( <= 1.0 0 ) )
+                ( print ( <= 1.0 1 ) )
+
+                ( print ( >= 0 1 ) )
+                ( print ( >= 1 0 ) )
+                ( print ( >= 1 1 ) )
+
+                ( print ( >= 0.0 1.0 ) )
+                ( print ( >= 1.0 0.0 ) )
+                ( print ( >= 1.0 1.0 ) )
+
+                ( print ( >= 0 1.0 ) )
+                ( print ( >= 1 0.0 ) )
+                ( print ( >= 1 1.0 ) )
+
+                ( print ( >= 0.0 1 ) )
+                ( print ( >= 1.0 0 ) )
+                ( print ( >= 1.0 1 ) )
+            }
+            """;
+
+        var testConsole = HelperMethods.CaptureOutputAndExecute(input);
+
+        Received.InOrder(() =>
+        {
+            testConsole.Write("true");
+            testConsole.Write("false");
+            testConsole.Write("true");
+
+            testConsole.Write("true");
+            testConsole.Write("false");
+            testConsole.Write("true");
+
+            testConsole.Write("true");
+            testConsole.Write("false");
+            testConsole.Write("true");
+
+            testConsole.Write("true");
+            testConsole.Write("false");
+            testConsole.Write("true");
+
+            testConsole.Write("false");
+            testConsole.Write("true");
+            testConsole.Write("true");
+
+            testConsole.Write("false");
+            testConsole.Write("true");
+            testConsole.Write("true");
+
+            testConsole.Write("false");
+            testConsole.Write("true");
+            testConsole.Write("true");
+
+            testConsole.Write("false");
+            testConsole.Write("true");
+            testConsole.Write("true");
+        });
+    }
 }

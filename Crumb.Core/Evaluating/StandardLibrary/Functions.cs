@@ -12,4 +12,32 @@ internal class Functions
             )
         }
         """;
+
+    internal static string LessThanOrEqual => $$"""
+        {
+            (
+                fun [ a b ]
+                {
+                    ( or
+                        ( < a b )
+                        ( = a b )
+                    )
+                }
+            )
+        }
+        """;
+
+    internal static string GreaterThanOrEqual => $$"""
+        {
+            (
+                fun [ a b ]
+                {
+                    ( or
+                        ( > a b )
+                        ( = a b )
+                    )
+                }
+            )
+        }
+        """;
 }

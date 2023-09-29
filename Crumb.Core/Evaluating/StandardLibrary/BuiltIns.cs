@@ -79,5 +79,7 @@ public static class BuiltIns
     internal static readonly ReadOnlyDictionary<string, string> Functions = new Dictionary<string, string>
     {
         { Names.PrintLine, StandardLibrary.Functions.PrintLine },
+        { Names.LessThanOrEqual, StandardLibrary.Functions.LessThanOrEqual},
+        { Names.GreaterThanOrEqual, StandardLibrary.Functions.GreaterThanOrEqual },
     }.AsReadOnly();
 }
