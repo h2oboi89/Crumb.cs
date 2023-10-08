@@ -39,7 +39,15 @@ internal class DefinedFunction : IEquatable<DefinedFunction>
         return hashCode.ToHashCode();
     }
 
-    public static bool operator ==(DefinedFunction left, DefinedFunction right) => left.Equals(right);
+    public static bool operator ==(DefinedFunction left, DefinedFunction right)
+    {
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        return left.Equals(right);
+    }
 
     public static bool operator !=(DefinedFunction left, DefinedFunction right) => !(left == right);
 }

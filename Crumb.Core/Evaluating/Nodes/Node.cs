@@ -40,7 +40,15 @@ public abstract class Node : IEquatable<Node>
 
     protected abstract int ValueGetHashCode();
 
-    public static bool operator ==(Node left, Node right) => left.Equals(right);
+    public static bool operator ==(Node left, Node right)
+    {
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        return left.Equals(right);
+    }
 
     public static bool operator !=(Node left, Node right) => !(left == right);
 }

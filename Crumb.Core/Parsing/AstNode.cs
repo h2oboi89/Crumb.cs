@@ -76,7 +76,15 @@ public class AstNode : IEquatable<AstNode>
         return hashCode.ToHashCode();
     }
 
-    public static bool operator ==(AstNode left, AstNode right) => left.Equals(right);
+    public static bool operator ==(AstNode left, AstNode right)
+    {
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        return left.Equals(right);
+    }
 
     public static bool operator !=(AstNode left, AstNode right) => !(left == right);
 }

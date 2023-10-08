@@ -23,7 +23,7 @@ public static class BuiltIns
         //public const string WriteFile = "write";
 
         // comparisons
-        //public const string Is = "is";
+        //public const string Is = "is";    // does this require typeof?
         { Names.LessThan, StandardLibrary.NativeFunctions.LessThan },
         { Names.GreaterThan, StandardLibrary.NativeFunctions.GreaterThan },
         { Names.Equal, StandardLibrary.NativeFunctions.Equal },
