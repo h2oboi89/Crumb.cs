@@ -58,6 +58,8 @@ internal static class Names
     public const string While = "while";
     public const string If = "if";
     public const string Wait = "wait";
+    public const string Break = "break";
+    public const string Break = "continue";
 
     // types
     public const string IntegerType = "integer";
