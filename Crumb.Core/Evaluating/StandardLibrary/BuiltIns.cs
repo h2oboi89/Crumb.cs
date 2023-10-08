@@ -53,7 +53,7 @@ public static class BuiltIns
         //public const string If = "if";
         //public const string Wait = "wait";
         //public const string Break = "break";
-        //public const string Break = "continue";
+        //public const string Continue = "continue";
 
         // types
         //public const string Integer = "integer";
