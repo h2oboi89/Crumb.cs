@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crumb.Core", "Crumb.Core\Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{6D49BC63-13E1-4159-9A58-5E522E8B828E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crumb", "Crumb\Crumb.csproj", "{754359B7-1D04-4228-98E4-91C58CD154D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D49BC63-13E1-4159-9A58-5E522E8B828E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{754359B7-1D04-4228-98E4-91C58CD154D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{754359B7-1D04-4228-98E4-91C58CD154D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{754359B7-1D04-4228-98E4-91C58CD154D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{754359B7-1D04-4228-98E4-91C58CD154D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

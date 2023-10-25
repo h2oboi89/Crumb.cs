@@ -29,7 +29,7 @@ References: [Atom](#Atom), [Apply](#Apply)
 ![Atom](./diagram/Atom.svg)
 
 Used by: [Block](#Block), [Apply](#Apply), [List](#List)
-References: [List](#List), [Integer](#Integer), [Float](#Float), [String](#String), [Identifier](#Identifier), [Block](#Block)
+References: [List](#List), [Integer](#Integer), [Float](#Float), [String](#String), [Boolean](#Boolean), [Void](#Void), [Identifier](#Identifier), [Block](#Block)
 
 ### List
 
@@ -61,6 +61,18 @@ Used by: [Integer](#Integer), [Float](#Float)
 ### String
 
 ![String](./diagram/String.svg)
+
+Used by: [Atom](#Atom)
+
+### Boolean
+
+![Boolean](./diagram/Boolean.svg)
+
+Used by: [Atom](#Atom)
+
+### Void
+
+![Void](./diagram/Void.svg)
 
 Used by: [Atom](#Atom)
 

@@ -4,7 +4,7 @@ using Crumb.Core.Parsing;
 namespace UnitTests.Crumb.Core.Parsing;
 
 [TestFixture]
-internal class ParserTests
+internal static class ParserTests
 {
     [Test]
     public static void EmptyString_ThrowsParsingException()
@@ -170,7 +170,7 @@ internal class ParserTests
         var tokens = Lexer.Tokenize("""
             {
                 ( 
-                    ( def [ a b ] { 
+                    ( fun [ a b ] { 
                         ( + a b ) 
                     } )
                     1
@@ -183,7 +183,7 @@ internal class ParserTests
             1 | Block
                 2 | Apply
                     3 | Apply
-                        3 | Identifier 'def'
+                        3 | Identifier 'fun'
                         3 | List
                             3 | Identifier 'a'
                             3 | Identifier 'b'

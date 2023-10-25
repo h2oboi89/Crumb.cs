@@ -1,14 +1,10 @@
 Program     ::= Start Block End
 
-Block       ::= '{' ( Block | Statement )* '}'
+Block       ::= '{' ( Apply | Atom )* '}'
 
-Statement   ::= ( Apply | Define )+
+Apply       ::= '(' ( Atom | Apply )+ ')'
 
-Apply       ::= '(' Identifier ( Atom )* ')'
-
-Define      ::= '(' 'define' Identifier List? Block ')'
-
-Atom        ::= List | Integer | Float| String | Identifier
+Atom        ::= List | Integer | Float | String | Boolean | Void | Identifier | Block
 
 List        ::= '[' ( Atom )* ']'
 
@@ -19,5 +15,9 @@ Float       ::= [ '-' ] ( Digit )+ '.' ( Digit )+
 Digit       ::= '0-9'+
 
 String      ::= '"' [.]* '"'
+
+Boolean     ::= 'true' | 'false'
+
+Void        ::= 'void'
 
 Identifier  ::= [.]+
